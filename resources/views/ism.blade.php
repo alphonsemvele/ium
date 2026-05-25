@@ -541,22 +541,22 @@
     .float-btn.fb i  { color:var(--white) !important; }
 
     /* Bouton Voir plus */
+    /* Bouton Voir plus */
     .btn-voir-plus {
         display:flex; align-items:center; justify-content:center; gap:8px;
         width:100%; padding:10px 14px;
-        background:#34c759; color:#fff !important;
+        background:transparent; color:var(--blue) !important;
+        border:1.5px solid var(--blue);
         border-radius:8px; font-size:.85rem; font-weight:500;
         text-decoration:none;
         transition:all .3s ease;
-        border:none;
     }
     .btn-voir-plus:hover {
-        background:#28a745;
+        background:var(--blue); color:#fff !important;
         transform:translateY(-2px);
-        box-shadow:0 4px 12px rgba(52,199,89,.3);
-        color:#fff !important;
+        box-shadow:0 4px 12px rgba(26,115,232,.25);
     }
-    .btn-voir-plus i { color:#fff !important; }
+    .btn-voir-plus i { color:inherit !important; }
     /* ============================================================
        17. UTILITAIRES
     ============================================================ */
