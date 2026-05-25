@@ -13,9 +13,9 @@
     <meta name="viewport" content="width=device-width,initial-scale=1,shrink-to-fit=no">
 
     <!-- Favicons -->
-    <link rel="apple-touch-icon" sizes="180x180" href="{{ asset('asset_vitrine/assets/img/logo.png') }}">
-    <link rel="icon" type="image/png" sizes="32x32" href="{{ asset('asset_vitrine/assets/img/logo.png') }}">
-    <link rel="icon" type="image/png" sizes="16x16" href="{{ asset('asset_vitrine/assets/img/logo.png') }}">
+    <link rel="apple-touch-icon" sizes="180x180" href="{{ asset('images/logo.jpeg') }}">
+<link rel="icon" type="image/png" sizes="32x32" href="{{ asset('images/logo.jpeg') }}">
+<link rel="icon" type="image/png" sizes="16x16" href="{{ asset('images/logo.jpeg') }}">
     <link rel="manifest" href="{{ asset('asset_vitrine/assets/img/favicons/manifest.json') }}">
     <meta name="msapplication-TileColor" content="#ffffff">
     <meta name="theme-color" content="#1a73e8">
@@ -495,7 +495,7 @@
         <div class="th-menu-area text-center">
             <button class="th-menu-toggle"><i class="fal fa-times"></i></button>
             <div class="mobile-logo">
-                <a href="#"><img src="{{ asset('images/logo.png') }}" style="height: 120px; width: 120px"
+                <a href="#"><img src="{{ asset('images/logo.jpeg') }}" style="height: 120px; width: 120px"
                         alt="INSTITUT SUPERIEUR LA MAJESTUEUSE la Majestueuse"></a>
             </div>
             <div class="th-mobile-menu">
@@ -549,7 +549,7 @@
                         <div class="row align-items-center justify-content-between">
                             <div class="col-auto">
                                 <div class="header-logo">
-                                    <a href="#"><img src="{{ asset('images/logo.png') }}"
+                                    <a href="#"><img src="{{ asset('images/logo.jpeg') }}"
                                             style="height: 120px; width: 120px"
                                             alt="INSTITUT SUPERIEUR LA MAJESTUEUSE la Majestueuse"></a>
                                 </div>

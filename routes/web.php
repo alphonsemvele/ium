@@ -41,6 +41,17 @@ $content = "Chers administrateurs, de la plateforme ERP  ISM NDAZOA. Nous sommes
  Mail::to('elvinyondoua@gmail.com')->send(new notifMail($subject,$content));
     return 'Email sent!';
 });
+
+Route::get('/formation/{slug}', function ($slug) {
+    $formations = config('formations');
+    abort_unless(isset($formations[$slug]), 404);
+
+    return view('formation-detail', [
+        'formation' => $formations[$slug],
+        'slug' => $slug,
+    ]);
+})->name('formation.show');
+    
 // Route::get('/dashboard', function () {
 //     return view('dashboard');
 // })->middleware(['auth', 'verified'])->name('dashboard');

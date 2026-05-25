@@ -540,23 +540,6 @@
     .float-btn.fb  { bottom:78px; background:#0084FF; color:var(--white) !important; }
     .float-btn.fb i  { color:var(--white) !important; }
 
-    /* Bouton Voir plus */
-    .btn-voir-plus {
-        display:flex; align-items:center; justify-content:center; gap:8px;
-        width:100%; padding:10px 14px;
-        background:#34c759; color:#fff !important;
-        border-radius:8px; font-size:.85rem; font-weight:500;
-        text-decoration:none;
-        transition:all .3s ease;
-        border:none;
-    }
-    .btn-voir-plus:hover {
-        background:#28a745;
-        transform:translateY(-2px);
-        box-shadow:0 4px 12px rgba(52,199,89,.3);
-        color:#fff !important;
-    }
-    .btn-voir-plus i { color:#fff !important; }
     /* ============================================================
        17. UTILITAIRES
     ============================================================ */
@@ -943,7 +926,6 @@
                             <p class="admission-card_text">{{ $c['desc'] }}</p>
                             <a href="#" class="link-btn register-btn" data-filiere="{{ $c['title'] }}">S'inscrire <i class="fas fa-arrow-right"></i></a>
                             <a href="#" class="btn-brochure mt-3"><i class="fas fa-download"></i> Télécharger la brochure</a>
-                            <a href="{{ route('formation.show', \Illuminate\Support\Str::slug($c['title'])) }}" class="btn-voir-plus mt-2"><i class="fas fa-eye"></i> Voir plus</a>
                         </div>
                     </div>
                 </div>
@@ -966,7 +948,6 @@
                             <p class="admission-card_text">{{ $c['desc'] }}</p>
                             <a href="#" class="link-btn register-btn" data-filiere="{{ $c['title'] }}">S'inscrire <i class="fas fa-arrow-right"></i></a>
                             <a href="#" class="btn-brochure mt-3"><i class="fas fa-download"></i> Télécharger la brochure</a>
-                            <a href="{{ route('formation.show', \Illuminate\Support\Str::slug($c['title'])) }}" class="btn-voir-plus mt-2"><i class="fas fa-eye"></i> Voir plus</a>
                         </div>
                     </div>
                 </div>
@@ -989,7 +970,6 @@
                             <p class="admission-card_text">{{ $c['desc'] }}</p>
                             <a href="#" class="link-btn register-btn" data-filiere="{{ $c['title'] }}">S'inscrire <i class="fas fa-arrow-right"></i></a>
                             <a href="#" class="btn-brochure mt-3"><i class="fas fa-download"></i> Télécharger la brochure</a>
-                            <a href="{{ route('formation.show', \Illuminate\Support\Str::slug($c['title'])) }}" class="btn-voir-plus mt-2"><i class="fas fa-eye"></i> Voir plus</a>
                         </div>
                     </div>
                 </div>
