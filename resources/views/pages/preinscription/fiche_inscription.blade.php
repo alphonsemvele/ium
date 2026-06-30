@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>Fiche d'Inscription - Institut Supérieur La Majestueuse Ndazoa</title>
+    <title>Fiche d'Inscription - Institut Universitaire la Majestueuse Ndazoa</title>
     <style>
         @page {
             margin: 8mm;
@@ -292,7 +292,7 @@
             <div class="year-text">20........../20.............</div>
         </div>
 
-        <div class="school-name">INSTITUT SUPÉRIEUR LA MAJESTUEUSE NDAZOA</div>
+        <div class="school-name">Institut Universitaire la Majestueuse NDAZOA</div>
     </div>
 
     <div class="section">

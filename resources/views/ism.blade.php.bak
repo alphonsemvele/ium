@@ -3,8 +3,8 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
-    <title>Institut Supérieur La Majestueuse de Ndazoa</title>
-    <meta name="description" content="L'Institut Supérieur La Majestueuse de NDAZOA">
+    <title>Institut Universitaire la Majestueuse de Ndazoa</title>
+    <meta name="description" content="L'Institut Universitaire la Majestueuse de NDAZOA">
     <meta name="keywords" content="INSTITUT SUPERIEUR LA MAJESTUEUSE, Ndazoa, formation professionnelle, bilingue, Cameroun">
     <meta name="robots" content="INDEX,FOLLOW">
     <meta name="viewport" content="width=device-width,initial-scale=1,shrink-to-fit=no">
@@ -620,7 +620,7 @@
     <div class="pre-logo">
         <img src="{{ asset('images/logo.png') }}" alt="ISM">
     </div>
-    <p class="pre-label">Institut Supérieur La Majestueuse</p>
+    <p class="pre-label">Institut Universitaire la Majestueuse</p>
     <div class="pre-bar-wrap"><div class="pre-bar"></div></div>
     <p class="pre-label" style="font-size:.77rem;opacity:.72;">Chargement en cours…</p>
     <div class="pre-spinner"></div>
@@ -676,7 +676,7 @@
             <div class="menu-area">
                 <div class="container">
                     <div class="header-logo">
-                        <a href="#"><img src="{{ asset('images/logo.png') }}" alt="Institut Supérieur La Majestueuse"></a>
+                        <a href="#"><img src="{{ asset('images/logo.png') }}" alt="Institut Universitaire la Majestueuse"></a>
                     </div>
                     <div style="display:flex;align-items:center;gap:10px;">
                         <nav class="main-menu">
@@ -716,7 +716,7 @@
                 <h1 class="hero-title" data-aos="slide-down" data-aos-delay="300">Votre avenir commence ici</h1>
                 <p class="hero-text" data-aos="fade-up" data-aos-delay="400"
                     style="max-width: 700px; margin: 0 auto 30px;">
-                    Dans quelques jours, ce sera la rentrée académique à l'Institut Supérieur La Majestueuse ! Notre
+                    Dans quelques jours, ce sera la rentrée académique à l'Institut Universitaire la Majestueuse ! Notre
                     équipe est mobilisée : techniciens de maintenance, chefs de département, coordonnateurs,
                     sécurité et médecins sont à pied d'œuvre pour accueillir notre première cuvée d'étudiants.
                     Inscriptions, chambres équipées de la cité universitaire... Tout est prêt pour votre réussite !
@@ -1364,7 +1364,7 @@
                 <div style="margin-bottom:14px;">
                     <a href="#"><img src="{{ asset('images/logo_white.png') }}" style="height:58px;width:auto;" alt="ISM"></a>
                 </div>
-                <p style="color:rgba(255,255,255,.6);font-size:.83rem;line-height:1.65;margin-bottom:16px;">Institut Supérieur La Majestueuse de Ndazoa — Excellence, Professionnalisme, Avenir.</p>
+                <p style="color:rgba(255,255,255,.6);font-size:.83rem;line-height:1.65;margin-bottom:16px;">Institut Universitaire la Majestueuse de Ndazoa — Excellence, Professionnalisme, Avenir.</p>
                 <div class="th-social">
                     <a href="#"><i class="fab fa-facebook-f"></i></a>
                     <a href="#"><i class="fab fa-twitter"></i></a>
@@ -1417,7 +1417,7 @@
         <div class="container">
             <div class="row align-items-center">
                 <div class="col-md-6">
-                    <p class="copyright-text">© 2025 <a href="#">Institut Supérieur La Majestueuse</a>. Tous droits réservés.</p>
+                    <p class="copyright-text">© 2025 <a href="#">Institut Universitaire la Majestueuse</a>. Tous droits réservés.</p>
                 </div>
                 <div class="col-md-6">
                     <div class="footer-links">

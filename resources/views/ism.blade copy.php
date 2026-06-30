@@ -4,9 +4,9 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
-    <title>Institut Supérieur La Majestueuse de Ndazoa</title>
+    <title>Institut Universitaire la Majestueuse de Ndazoa</title>
     <meta name="author" content="themeholy">
-    <meta name="description" content="L'Institut Supérieur La Majestueuse de NDAZOA">
+    <meta name="description" content="L'Institut Universitaire la Majestueuse de NDAZOA">
     <meta name="keywords"
         content="INSTITUT SUPERIEUR LA MAJESTUEUSE, Ndazoa, formation professionnelle, bilingue, Cameroun">
     <meta name="robots" content="INDEX,FOLLOW">
@@ -540,7 +540,7 @@
         </div>
 
         <div class="preloader-text">
-            Institut Supérieur La Majestueuse
+            Institut Universitaire la Majestueuse
         </div>
 
         <div class="preloader-progress">
@@ -678,7 +678,7 @@
             <div class="hero-style15">
                 <h1 class="hero-title" data-aos="slide-down" data-aos-delay="300">Votre avenir commence ici</h1>
                 <p class="hero-text" data-aos="fade-up" data-aos-delay="400" style="max-width: 700px; margin: 0 auto 30px;">
-                    Dans quelques jours, ce sera la rentrée académique à l'Institut Supérieur La Majestueuse ! Notre équipe est mobilisée : techniciens de maintenance, chefs de département, coordonnateurs, sécurité et médecins sont à pied d'œuvre pour accueillir notre première cuvée d'étudiants. Inscriptions, chambres équipées de la cité universitaire... Tout est prêt pour votre réussite !
+                    Dans quelques jours, ce sera la rentrée académique à l'Institut Universitaire la Majestueuse ! Notre équipe est mobilisée : techniciens de maintenance, chefs de département, coordonnateurs, sécurité et médecins sont à pied d'œuvre pour accueillir notre première cuvée d'étudiants. Inscriptions, chambres équipées de la cité universitaire... Tout est prêt pour votre réussite !
                 </p>
                 <div class="btn-group" data-aos="slide-up" data-aos-delay="300">
                     <a href="{{ route('preinscription.index') }}" class="th-btn">Rejoignez-nous<i class="fas fa-long-arrow-right ms-2"></i></a>

@@ -6,6 +6,7 @@ use App\Models\ProfilSalaire;
 use App\Models\CategorieRh;
 use App\Models\Indemnite;
 use App\Models\Retenue;
+use App\Models\Echelon;
 use App\Models\User;
 
 name('admin.rh.profils');
@@ -17,7 +18,8 @@ new class extends Component {
 
     public string $nom          = '';
     public string $description  = '';
-    public        $categorie_id = null;
+    public        $categorie_id  = null;
+    public        $echelon_id    = null;
     public bool   $actif        = true;
     public array  $indemnites_selectionnees = [];
     public array  $retenues_selectionnees   = [];
@@ -37,6 +39,7 @@ new class extends Component {
 
     public $profils          = [];
     public $categories       = [];
+    public $echelons_dispo   = [];
     public $indemnites_dispo = [];
     public $retenues_dispo   = [];
     public $tous_employes    = [];
@@ -51,13 +54,22 @@ new class extends Component {
 
     private function loadData(): void
     {
-        $this->profils = ProfilSalaire::with(['categorie', 'indemnites', 'retenues'])
+        $this->profils = ProfilSalaire::with(['categorie', 'echelon', 'indemnites', 'retenues'])
             ->withCount('employes as nb_employes')->orderBy('nom')->get();
         $this->categories       = CategorieRh::where('actif', true)->orderBy('libelle')->get();
+        $this->echelons_dispo   = collect();
         $this->indemnites_dispo = Indemnite::where('actif', true)->orderBy('libelle')->get();
         $this->retenues_dispo   = Retenue::where('actif', true)->orderBy('libelle')->get();
         $this->tous_employes    = User::whereNotIn('role', ['student', 'etudiant', 'admin'])
             ->where('status', 'Success')->orderBy('name')->get();
+    }
+
+    public function updatedCategorieId($value): void
+    {
+        $this->echelon_id    = null;
+        $this->echelons_dispo = $value
+            ? Echelon::where('categorie_rh_id', $value)->where('actif', true)->orderBy('numero')->get()
+            : collect();
     }
 
     public function openCreate(): void
@@ -65,6 +77,7 @@ new class extends Component {
         $this->nom         = '';
         $this->description = '';
         $this->categorie_id = null;
+        $this->echelon_id   = null;
         $this->actif        = true;
         $this->editProfilId = null;
         $this->indemnites_selectionnees = [];
@@ -78,7 +91,11 @@ new class extends Component {
         if (!$profil) return;
         $this->nom          = $profil->nom;
         $this->description  = $profil->description ?? '';
-        $this->categorie_id = $profil->categorie_rh_id;
+        $this->categorie_id   = $profil->categorie_rh_id;
+        $this->echelon_id     = $profil->echelon_id;
+        $this->echelons_dispo = $profil->categorie_rh_id
+            ? Echelon::where('categorie_rh_id', $profil->categorie_rh_id)->where('actif', true)->orderBy('numero')->get()
+            : collect();
         $this->actif        = $profil->actif;
         $this->editProfilId = $id;
         $this->indemnites_selectionnees = $profil->indemnites->map(fn($i) => [
@@ -140,12 +157,14 @@ new class extends Component {
             'nom'          => 'required|string|max:255',
             'description'  => 'nullable|string',
             'categorie_id' => 'nullable|exists:categories_rh,id',
+            'echelon_id'   => 'nullable|exists:echelons,id',
         ]);
         try {
             $data = [
                 'nom'             => $this->nom,
                 'description'     => $this->description ?: null,
                 'categorie_rh_id' => $this->categorie_id ?: null,
+                'echelon_id'      => $this->echelon_id ?: null,
                 'actif'           => $this->actif,
             ];
             $profil = $this->editProfilId
@@ -168,8 +187,8 @@ new class extends Component {
             $this->loadData();
             $this->notify($this->editProfilId ? 'Profil mis à jour !' : 'Profil créé avec succès !');
         } catch (\Exception $e) {
-            logger('Erreur saveProfil: ' . $e->getMessage());
-            $this->notify('Erreur lors de l\'enregistrement.', 'error');
+            logger('Erreur saveProfil: ' . $e->getMessage() . ' | ' . $e->getTraceAsString());
+            $this->notify('Erreur : ' . $e->getMessage(), 'error');
         }
     }
 
@@ -224,8 +243,10 @@ new class extends Component {
 
     public function getSalaireBasePreview(): float
     {
-        if (!$this->categorie_id) return 0;
-        return (float)($this->categories->firstWhere('id', $this->categorie_id)?->salaire_base ?? 0);
+        if ($this->echelon_id) {
+            return (float)(Echelon::find($this->echelon_id)?->salaire ?? 0);
+        }
+        return 0;
     }
 
     public function getPreviewNet(): float
@@ -357,7 +378,7 @@ new class extends Component {
                     <tbody>
                         @foreach ($profils as $i => $profil)
                             @php
-                                $base = $profil->categorie ? (float)$profil->categorie->salaire_base : 0;
+                                $base = $profil->echelon ? (float)$profil->echelon->salaire : 0;
                                 $ind  = $profil->indemnites->sum(fn($x) => $x->pivot->type_calcul === 'fixe' ? $x->pivot->value : round($base * $x->pivot->value / 100));
                                 $ret  = $profil->retenues->sum(fn($x)  => $x->pivot->type_calcul === 'fixe' ? $x->pivot->value : round($base * $x->pivot->value / 100));
                                 $net  = $base + $ind - $ret;
@@ -467,9 +488,23 @@ new class extends Component {
                                     class="w-full text-sm border border-gray-300 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-sky-400 transition bg-white">
                                     <option value="">— Aucune —</option>
                                     @foreach ($categories as $cat)
-                                        <option value="{{ $cat->id }}">{{ $cat->libelle }} — {{ number_format($cat->salaire_base, 0, ',', ' ') }} FCFA</option>
+                                        <option value="{{ $cat->id }}">{{ $cat->libelle }}</option>
                                     @endforeach
                                 </select>
+                            </div>
+                            <div>
+                                <label class="block text-xs font-bold text-gray-600 uppercase tracking-wide mb-2">Échelon (salaire de base)</label>
+                                <select wire:model.live="echelon_id"
+                                    class="w-full text-sm border border-gray-300 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-sky-400 transition bg-white {{ !$categorie_id ? 'opacity-50 cursor-not-allowed' : '' }}"
+                                    {{ !$categorie_id ? 'disabled' : '' }}>
+                                    <option value="">— Choisir un échelon —</option>
+                                    @foreach ($echelons_dispo as $ech)
+                                        <option value="{{ $ech->id }}">Éch. {{ $ech->numero }} — {{ $ech->libelle }} — {{ number_format($ech->salaire, 0, ',', ' ') }} FCFA</option>
+                                    @endforeach
+                                </select>
+                                @if (!$categorie_id)
+                                    <p class="text-xs text-gray-400 mt-1">Sélectionnez d'abord une catégorie</p>
+                                @endif
                             </div>
                             @if ($editProfilId)
                                 <div class="flex items-center gap-3 p-3 bg-gray-50 rounded-xl border border-gray-200">

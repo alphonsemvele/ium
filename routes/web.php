@@ -6,7 +6,23 @@ use Spatie\RouteDiscovery\Discovery\Discover;
 use App\Mail\notifMail;
 use Illuminate\Support\Facades\Mail;
 
-
+use App\Http\Controllers\BulletinController;
+ 
+// Prévisualisation inline (stream pour iframe)
+Route::get('/bulletin/{id}/preview', [BulletinController::class, 'previsualiser'])
+    ->middleware(['auth', 'verified'])
+    ->name('bulletin.preview');
+ 
+// Téléchargement PDF
+Route::get('/bulletin/{id}/pdf', [BulletinController::class, 'telecharger'])
+    ->middleware(['auth', 'verified'])
+    ->name('bulletin.pdf');
+ 
+// Batch PDF
+Route::post('/bulletins/batch-pdf', [BulletinController::class, 'batch'])
+    ->middleware(['auth', 'verified'])
+    ->name('bulletins.batch.pdf');
+ 
 
  Discover::controllers()->in(app_path('Http/Controllers'));
 

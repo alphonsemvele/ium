@@ -6,7 +6,7 @@
     <meta http-equiv="x-ua-compatible" content="ie=edge">
     <title>Institut Superieur La Majestueuse</title>
     <meta name="author" content="themeholy">
-    <meta name="description" content="L'Institut Supérieur La Majestueuse de NDAZOA">
+    <meta name="description" content="L'Institut Universitaire la Majestueuse de NDAZOA">
     <meta name="keywords"
         content="INSTITUT SUPERIEUR LA MAJESTUEUSE, Ndazoa, formation professionnelle, bilingue, Cameroun">
     <meta name="robots" content="INDEX,FOLLOW">
@@ -428,7 +428,7 @@
                     <h1 class="hero-title" data-aos="slide-down" data-aos-delay="300">Formation d'excellence</h1>
                     <p class="hero-text" data-aos="slide-up" data-aos-delay="100">Nos formations pratiques et bilingues vous préparent à des carrières réussies dans les métiers techniques et artisanaux.</p>
                     <div class="btn-group" data-aos="slide-up" data-aos-delay="300">
-                         <a href="#" class="th-btn">ISM(Institut Supérieur la Majestueuse)<i class="fas fa-long-arrow-right ms-2"></i></a>
+                         <a href="#" class="th-btn">ISM(Institut Universitaire la Majestueuse)<i class="fas fa-long-arrow-right ms-2"></i></a>
                         <a href="#" class="th-btn style4">IFPM (Institut de Formation professionnelle la Majestueuse<i class="fas fa-long-arrow-right ms-2"></i></a>
                     </div>
                 </div>
@@ -443,7 +443,7 @@
                     <h1 class="hero-title" data-aos="slide-down" data-aos-delay="300">Votre avenir commence ici</h1>
                     <p class="hero-text" data-aos="slide-up" data-aos-delay="100">À l'institut, nous formons des professionnels compétents dans un cadre stimulant et bilingue.</p>
                     <div class="btn-group" data-aos="slide-up" data-aos-delay="300">
-                         <a href="#" class="th-btn">ISM(Institut Supérieur la Majestueuse)<i class="fas fa-long-arrow-right ms-2"></i></a>
+                         <a href="#" class="th-btn">ISM(Institut Universitaire la Majestueuse)<i class="fas fa-long-arrow-right ms-2"></i></a>
                         <a href="#" class="th-btn style4">IFPM (Institut de Formation professionnelle la Majestueuse<i class="fas fa-long-arrow-right ms-2"></i></a>
                     </div>
                 </div>
