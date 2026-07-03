@@ -5,7 +5,7 @@ use App\Models\PaiementSalaire;
 use App\Models\User;
 
 name('admin.bulletins');
-middleware(['auth', 'verified']);
+middleware(['auth', 'verified', 'role']);
 
 new class extends Component {
 

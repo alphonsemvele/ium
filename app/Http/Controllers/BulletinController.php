@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Auth;
 class BulletinController extends Controller
 {
     /**
-     * Télécharger le bulletin PDF d'un paiement
+     * Tï¿½lï¿½charger le bulletin PDF d'un paiement
      */
     public function telecharger(int $id)
     {
@@ -23,17 +23,17 @@ class BulletinController extends Controller
             'payePar',
         ])->findOrFail($id);
 
-        // Seul l'admin ou l'employé concerné peut télécharger
+        // Seul l'admin ou l'employï¿½ concernï¿½ peut tï¿½lï¿½charger
         $user = Auth::user();
         if ($user->role !== 'admin' && $user->id !== $paiement->user_id) {
             abort(403);
         }
 
         $moisNoms = [
-            1 => 'Janvier', 2 => 'Février',   3 => 'Mars',
+            1 => 'Janvier', 2 => 'Fï¿½vrier',   3 => 'Mars',
             4 => 'Avril',   5 => 'Mai',        6 => 'Juin',
-            7 => 'Juillet', 8 => 'Août',       9 => 'Septembre',
-            10 => 'Octobre',11 => 'Novembre',  12 => 'Décembre',
+            7 => 'Juillet', 8 => 'Aoï¿½t',       9 => 'Septembre',
+            10 => 'Octobre',11 => 'Novembre',  12 => 'Dï¿½cembre',
         ];
 
         $detail     = $paiement->detail_json ?? [];
@@ -59,10 +59,70 @@ class BulletinController extends Controller
     }
 
     /**
-     * Télécharger plusieurs bulletins en un seul PDF (batch)
+     * TÃ©lÃ©charger, en un seul PDF, tous les bulletins de l'employÃ© connectÃ©
+     * pour une pÃ©riode (annÃ©e + plage de mois).
+     */
+    public function telechargerPeriode(Request $request)
+    {
+        $user = Auth::user();
+
+        // Plage possible sur plusieurs annÃ©es : (annÃ©e, mois) dÃ©but â†’ fin.
+        $anneeDebut = (int) $request->query('annee_debut', (int) date('Y'));
+        $anneeFin   = (int) $request->query('annee_fin', $anneeDebut);
+        $moisDebut  = max(1, min(12, (int) $request->query('mois_debut', 1)));
+        $moisFin    = max(1, min(12, (int) $request->query('mois_fin', 12)));
+
+        // Index chronologique (annÃ©e*12 + mois) pour comparer facilement.
+        $start = $anneeDebut * 12 + $moisDebut;
+        $end   = $anneeFin * 12 + $moisFin;
+        if ($start > $end) {
+            [$start, $end] = [$end, $start];
+        }
+
+        $paiements = PaiementSalaire::with(['employe', 'profil', 'echelon', 'validePar', 'payePar'])
+            ->where('user_id', $user->id)
+            ->whereRaw('(annee * 12 + mois) between ? and ?', [$start, $end])
+            ->orderBy('annee')
+            ->orderBy('mois')
+            ->get();
+
+        if ($paiements->isEmpty()) {
+            return back()->with('error', 'Aucun bulletin disponible pour cette pÃ©riode.');
+        }
+
+        $moisNoms = [
+            1 => 'Janvier', 2 => 'FÃ©vrier',  3 => 'Mars',
+            4 => 'Avril',   5 => 'Mai',       6 => 'Juin',
+            7 => 'Juillet', 8 => 'AoÃ»t',      9 => 'Septembre',
+            10 => 'Octobre',11 => 'Novembre', 12 => 'DÃ©cembre',
+        ];
+
+        $bulletins = $paiements->map(function ($p) use ($moisNoms) {
+            $detail = $p->detail_json ?? [];
+            return [
+                'paiement'   => $p,
+                'indemnites' => $detail['indemnites'] ?? [],
+                'retenues'   => $detail['retenues']   ?? [],
+                'moisNom'    => $moisNoms[$p->mois] ?? '',
+            ];
+        });
+
+        $pdf = Pdf::loadView('pdf.bulletins-periode', ['bulletins' => $bulletins])
+            ->setPaper('a4', 'portrait');
+
+        $suffixe  = $paiements->count() === 1
+            ? $paiements->first()->annee . '-' . str_pad($paiements->first()->mois, 2, '0', STR_PAD_LEFT)
+            : $anneeDebut . '_' . $anneeFin;
+        $filename = 'Bulletins_' . str_replace(' ', '_', strtoupper($user->name)) . '_' . $suffixe . '.pdf';
+
+        return $pdf->download($filename);
+    }
+
+    /**
+     * Tï¿½lï¿½charger plusieurs bulletins en un seul PDF (batch)
      */
     /**
-     * Prévisualiser le bulletin dans le navigateur (stream inline)
+     * Prï¿½visualiser le bulletin dans le navigateur (stream inline)
      */
     public function previsualiser(int $id)
     {
@@ -76,8 +136,8 @@ class BulletinController extends Controller
         }
 
         $moisNoms = [
-            1=>'Janvier',2=>'Février',3=>'Mars',4=>'Avril',5=>'Mai',6=>'Juin',
-            7=>'Juillet',8=>'Août',9=>'Septembre',10=>'Octobre',11=>'Novembre',12=>'Décembre',
+            1=>'Janvier',2=>'Fï¿½vrier',3=>'Mars',4=>'Avril',5=>'Mai',6=>'Juin',
+            7=>'Juillet',8=>'Aoï¿½t',9=>'Septembre',10=>'Octobre',11=>'Novembre',12=>'Dï¿½cembre',
         ];
 
         $detail     = $paiement->detail_json ?? [];
@@ -103,8 +163,8 @@ class BulletinController extends Controller
         ])->whereIn('id', $ids)->orderBy('user_id')->get();
 
         $moisNoms = [
-            1=>'Janvier',2=>'Février',3=>'Mars',4=>'Avril',5=>'Mai',6=>'Juin',
-            7=>'Juillet',8=>'Août',9=>'Septembre',10=>'Octobre',11=>'Novembre',12=>'Décembre',
+            1=>'Janvier',2=>'Fï¿½vrier',3=>'Mars',4=>'Avril',5=>'Mai',6=>'Juin',
+            7=>'Juillet',8=>'Aoï¿½t',9=>'Septembre',10=>'Octobre',11=>'Novembre',12=>'Dï¿½cembre',
         ];
 
         $logoPath = public_path('images/logo.png');

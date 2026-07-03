@@ -114,4 +114,104 @@ class User extends Authenticatable
     {
         return $this->belongsTo(Echelon::class, 'echelon_id');
     }
+
+    public function paiements()
+    {
+        return $this->hasMany(PaiementSalaire::class, 'user_id');
+    }
+
+    /* ===================================================================
+     |  Rôles & accès aux espaces
+     * =================================================================== */
+
+    /** Postes ayant accès uniquement au module RH & Paie. */
+    public const FINANCE_POSTES = ['dir_aaf', 'dir_rh', 'comptable', 'daf_ifpm'];
+
+    /** L'utilisateur fait-il partie du personnel finance / RH ? */
+    public function isFinanceStaff(): bool
+    {
+        return in_array($this->poste, self::FINANCE_POSTES, true);
+    }
+
+    /** Chemin de l'espace d'accueil de l'utilisateur après connexion. */
+    public function homePath(): string
+    {
+        if ($this->isFinanceStaff()) {
+            return '/finance';
+        }
+
+        return match ($this->role) {
+            'admin'               => '/admin',
+            'student', 'etudiant' => '/dashboard',
+            // Tout le personnel (coordonnateur, enseignant, personnel, concierge…)
+            // atterrit sur l'espace personnel : bulletin de paie + profil.
+            default               => '/personnel',
+        };
+    }
+
+    /** L'utilisateur est-il affilié à une filière / coordination ? */
+    public function hasFiliereModule(): bool
+    {
+        return in_array($this->role, ['coordonnateur', 'coordinateur', 'filiere'], true)
+            || !empty($this->filiere_id) || !empty($this->departement_id);
+    }
+
+    /** L'utilisateur est-il affilié à une spécialité / enseignement ? */
+    public function hasSpecialiteModule(): bool
+    {
+        return in_array($this->role, ['enseignant', 'specialite'], true)
+            || !empty($this->specialite_id);
+    }
+
+    /**
+     * Préfixes de chemins autorisés pour l'utilisateur.
+     * Utilisé par le middleware `role` pour cloisonner les espaces.
+     */
+    public function allowedPrefixes(): array
+    {
+        // Routes partagées, accessibles à tout utilisateur connecté.
+        $shared = ['logout', 'profile', 'profile/*', 'bulletin/*', 'bulletins/*'];
+
+        if ($this->role === 'admin') {
+            return ['*'];
+        }
+
+        if ($this->isFinanceStaff()) {
+            return array_merge($shared, [
+                'finance', 'finance/*',
+                'admin/rh', 'admin/rh/*',
+                'admin/paie', 'admin/paie/*',
+                'admin/bulletins-paie', 'admin/bulletins-paie/*',
+                'admin/salaires', 'admin/salaires/*',
+            ]);
+        }
+
+        if (in_array($this->role, ['student', 'etudiant'], true)) {
+            return array_merge($shared, ['dashboard', 'dashboard/*']);
+        }
+
+        // Personnel : espace personnel + éventuel espace filière / spécialité.
+        $prefixes = array_merge($shared, ['personnel', 'personnel/*']);
+
+        if ($this->hasFiliereModule()) {
+            $prefixes = array_merge($prefixes, ['filiere', 'filiere/*']);
+        }
+        if ($this->hasSpecialiteModule()) {
+            $prefixes = array_merge($prefixes, ['specialite', 'specialite/*']);
+        }
+
+        return $prefixes;
+    }
+
+    /** L'utilisateur peut-il accéder à la requête courante ? */
+    public function canAccess(\Illuminate\Http\Request $request): bool
+    {
+        foreach ($this->allowedPrefixes() as $prefix) {
+            if ($prefix === '*' || $request->is($prefix)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
 }

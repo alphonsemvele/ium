@@ -7,7 +7,7 @@ use App\Models\Indemnite;
 use App\Models\Retenue;
 
 name('admin.rh.index');
-middleware(['auth', 'verified']);
+middleware(['auth', 'verified', 'role']);
 
 new class extends Component {
 

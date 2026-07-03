@@ -7,7 +7,7 @@ use App\Models\Echelon;
 use Illuminate\Support\Facades\Auth;
 
 name('admin.paie');
-middleware(['auth', 'verified']);
+middleware(['auth', 'verified', 'role']);
 
 new class extends Component {
 

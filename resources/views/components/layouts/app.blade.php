@@ -5,10 +5,12 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>{{ $title ?? 'Page Title' }}</title>
+    <title>{{ $title ?? 'IUM NDAZOA' }}</title>
+    <link rel="icon" href="{{ asset('images/logo.png') }}">
+    <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/@heroicons/vue@2.0.18/dist/heroicons.min.js" defer></script>
     <link href="https://cdn.jsdelivr.net/npm/flowbite@3.1.2/dist/flowbite.min.css" rel="stylesheet" />
-    
+
     @livewireStyles
     {{-- @vite(['resources/css/app.css', 'resources/js/app.js']) --}}
 </head>
@@ -23,8 +25,8 @@
             @if($header)
              <nav class="bg-white border-gray-200 shadow-md ">
                 <div class="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
-                    <a href="#" class="flex items-center space-x-3 rtl:space-x-reverse">
-                        <img src="{{ asset('images/logo.png') }}" class="h-20" alt="Flowbite Logo" />
+                    <a href="{{ Auth::user()?->homePath() ?? '/' }}" class="flex items-center space-x-3 rtl:space-x-reverse">
+                        <img src="{{ asset('images/logo.png') }}" class="h-20" alt="IUM NDAZOA" />
                     </a>
                     <div class="flex items-center md:order-2 space-x-3 md:space-x-0 rtl:space-x-reverse">
                         <button type="button"
@@ -47,8 +49,8 @@
                             </div>
                             <ul class="py-2" aria-labelledby="user-menu-button">
                                 <li>
-                                    <a href="#"
-                                        class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Module</a>
+                                    <a href="{{ Auth::user()?->homePath() ?? '/' }}"
+                                        class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Mon espace</a>
                                 </li>
 
                                 <li>
@@ -67,13 +69,9 @@
                         <ul
                             class="flex flex-col font-medium p-4 md:p-0 mt-4 border border-gray-100 rounded-lg bg-gray-50 md:space-x-8 rtl:space-x-reverse md:flex-row md:mt-0 md:border-0 md:bg-white md:dark:bg-gray-900">
                             <li>
-                                <a href="/admin"
+                                <a href="{{ Auth::user()?->homePath() ?? '/' }}"
                                     class="block py-2 px-3 text-white bg-blue-700 rounded-sm md:bg-transparent md:text-blue-700 md:p-0 md:dark:text-blue-500"
                                     aria-current="page">Accueil</a>
-                            </li>
-                            <li>
-                                <a href="#"
-                                    class="block py-2 px-3 text-gray-900 rounded-sm hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0 md:dark:hover:text-blue-500 md:dark:hover:bg-transparent">Paramètres</a>
                             </li>
                         </ul>
                     </div>

@@ -42,13 +42,9 @@ class AuthenticatedSessionController extends Controller
             return redirect()->route('login')->with('error', 'Votre compte n\'a pas encore ete valide par l\'administrateur. Veuillez patienter ou contacter le service concerne.');
         }
 
-      return match ($user->role) {
-    'admin' => redirect()->intended('/admin'),
-    'coordonnateur' => redirect()->intended('/filiere'),
-    'enseignant' => redirect()->intended('/specialite'),
-    'etudiant' => redirect()->intended('/dashboard'),
-    default => redirect('/'),
-};
+        // Redirection vers l'espace correspondant au rôle / poste de l'utilisateur.
+        return redirect($user->homePath())
+            ->with('success', 'Bienvenue ' . ($user->name ?? '') . ' !');
     }
 
     /**

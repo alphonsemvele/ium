@@ -207,7 +207,7 @@ new class extends Component {
         $dep     = $fil?->departement;
         $niveau  = $etudiant->niveau ?? $spe?->niveau ?? 'L1';
         $annee   = $etudiant->annee_academique ?? (date('Y') . '-' . (date('Y') + 1));
-        $inst    = config('app.institution_name', 'ISM NDAZOA');
+        $inst    = config('app.institution_name', 'IUM NDAZOA');
         $fac     = config('app.faculte_name',     'Institut Supérieur de Management');
         $dob     = $etudiant->date_naissance ? date('d/m/Y', strtotime($etudiant->date_naissance)) : '—';
         $nom     = strtoupper($etudiant->name ?? '') . ' ' . ($etudiant->lastname ?? '');
@@ -302,7 +302,7 @@ table  { border-collapse: collapse; }
         echo '<table class="w100 hdr"><tr>';
         echo '<td width="30%">' . $h($inst) . '<br><span class="small">REPUBLIQUE DU CAMEROUN</span><br><span class="xsm ital">Paix-Travail-Patrie</span></td>';
         echo '<td width="40%" class="logo-td">';
-        echo '<div class="logo-box">ISM<br>NDAZOA</div><br>';
+        echo '<div class="logo-box">IUM<br>NDAZOA</div><br>';
         echo '<span class="inst">' . $h($fac) . '</span><br>';
         echo '<span class="fac-nm">' . $h($dep?->nom ?? 'Département') . '</span><br>';
         echo '<span class="xsm gray">BP — Yaoundé-Cameroun</span>';

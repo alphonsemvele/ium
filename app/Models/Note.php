@@ -32,6 +32,11 @@ class Note extends Model
         return $this->belongsTo(Examen::class);
     }
 
+    public function cours(): BelongsTo
+    {
+        return $this->belongsTo(Cour::class, 'cours_id');
+    }
+
     public function etudiant(): BelongsTo
     {
         return $this->belongsTo(User::class, 'etudiant_id');
