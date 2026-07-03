@@ -303,7 +303,7 @@
                                 <ul>
                                     <li><i class="fas fa-envelope"></i><b>Contactez-nous :
                                         </b>info@ecoledemetiersndazoa.com</li>
-                                    <li><i class="fas fa-phone"></i><b>Téléphone : </b>+237 691612145 | 695830031</li>
+                                    <li><i class="fas fa-phone"></i><b>Téléphone : </b>+237 655 34 19 39</li>
                                 </ul>
                             </div>
                         </div>
@@ -961,8 +961,8 @@
                             <div class="contact-feature-icon"><i class="fal fa-phone"></i></div>
                             <div class="media-body">
                                 <p class="contact-feature_label">Numéro de téléphone</p>
-                                <span class="contact-feature_link">Mobile : <span>+237 691612145 </span></span>
-                                <span class="contact-feature_link">Fixe : <span>+237 695830031</span></span>
+                                <span class="contact-feature_link">Mobile : <span>+237 655 34 19 39 </span></span>
+                                <span class="contact-feature_link">Whatsapp : <span>+237 655 34 19 39</span></span>
                             </div>
                         </div>
                         <div class="contact-feature">
@@ -1136,7 +1136,7 @@
                                 </div>
                                 <div class="info-box">
                                     <div class="info-box_icon"><i class="fas fa-phone"></i></div>
-                                    <p class="info-box_text">+237 695830031 | 691612145</p>
+                                    <p class="info-box_text">+237 655 34 19 39</p>
                                 </div>
                             </div>
                         </div>
@@ -1148,7 +1148,7 @@
             <div class="container">
                 <div class="row justify-content-between align-items-center">
                     <div class="col-lg-6">
-                        <p class="copyright-text">© 2025 L’École de Métier Ndazoa. Tous droits réservés.</p>
+                        <p class="copyright-text">© 2026 L’École de Métier Ndazoa. Tous droits réservés.</p>
                     </div>
                     <div class="col-lg-6 text-end">
                         <div class="footer-links">

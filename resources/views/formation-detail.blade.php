@@ -293,8 +293,8 @@
         <div class="container">
             <div class="header-links">
                 <ul>
-                    <li><i class="fas fa-envelope"></i><b>Email : </b>info@ism-ndazoa.com</li>
-                    <li><i class="fas fa-phone"></i><b>Tél : </b>+237 691 612 145 | 695 830 031</li>
+                    <li><i class="fas fa-envelope"></i><b>Email : </b>info@ium-ndazoa.com</li>
+                    <li><i class="fas fa-phone"></i><b>Tél : </b>+237 655341939</li>
                 </ul>
             </div>
             <div class="header-links">
@@ -371,7 +371,7 @@
 <section class="cta-section">
     <div class="container">
         <h2>Prêt à rejoindre la filière {{ $formation['nom'] }} ?</h2>
-        <p>Les inscriptions pour la rentrée 2025 sont ouvertes. Réservez votre place dès maintenant.</p>
+        <p>Les inscriptions pour la rentrée 2026–2027 sont ouvertes. Réservez votre place dès maintenant.</p>
         <a href="/#formations" class="th-btn">
             S'inscrire maintenant <i class="fas fa-arrow-right"></i>
         </a>
@@ -406,18 +406,18 @@
                 </div>
                 <div class="info-box">
                     <div class="info-box_icon"><i class="fas fa-phone"></i></div>
-                    <p class="info-box_text"><a href="tel:+237691612145">+237 691 612 145</a><br><a href="tel:+237695830031">+237 695 830 031</a></p>
+                    <p class="info-box_text"><a href="tel:+237655341939">+237655341939</a></p>
                 </div>
                 <div class="info-box">
                     <div class="info-box_icon"><i class="fas fa-envelope"></i></div>
-                    <p class="info-box_text"><a href="mailto:info@ism-ndazoa.com">info@ism-ndazoa.com</a></p>
+                    <p class="info-box_text"><a href="mailto:info@ism-ndazoa.com">info@ium-ndazoa.com</a></p>
                 </div>
             </div>
         </div>
     </div>
     <div class="copyright">
         <div class="container">
-            <p class="copyright-text">© 2025 <a href="/">Institut Universitaire la Majestueuse</a>. Tous droits réservés.</p>
+            <p class="copyright-text">© {{ date('Y') }} <a href="/">Institut Universitaire la Majestueuse</a>. Tous droits réservés.</p>
         </div>
     </div>
 </footer>
