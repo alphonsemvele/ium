@@ -4,7 +4,7 @@ use Livewire\Volt\Component;
 use App\Models\Indemnite;
 
 name('admin.rh.indemnites');
-middleware(['auth', 'verified']);
+middleware(['auth', 'verified', 'role']);
 
 new class extends Component {
 

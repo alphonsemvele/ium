@@ -10,7 +10,7 @@ use App\Models\Echelon;
 use App\Models\User;
 
 name('admin.rh.profils');
-middleware(['auth', 'verified']);
+middleware(['auth', 'verified', 'role']);
 
 new class extends Component {
 

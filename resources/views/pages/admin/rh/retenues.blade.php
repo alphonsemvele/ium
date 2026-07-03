@@ -4,7 +4,7 @@ use Livewire\Volt\Component;
 use App\Models\Retenue;
 
 name('admin.rh.retenues');
-middleware(['auth', 'verified']);
+middleware(['auth', 'verified', 'role']);
 
 new class extends Component {
 

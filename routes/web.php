@@ -7,6 +7,12 @@ use App\Mail\notifMail;
 use Illuminate\Support\Facades\Mail;
 
 use App\Http\Controllers\BulletinController;
+use App\Http\Controllers\ReleveController;
+
+// Relevé de notes de l'étudiant connecté (PDF)
+Route::get('/mon-releve/pdf', [ReleveController::class, 'telecharger'])
+    ->middleware(['auth', 'verified'])
+    ->name('releve.mine');
  
 // Prévisualisation inline (stream pour iframe)
 Route::get('/bulletin/{id}/preview', [BulletinController::class, 'previsualiser'])
@@ -17,6 +23,11 @@ Route::get('/bulletin/{id}/preview', [BulletinController::class, 'previsualiser'
 Route::get('/bulletin/{id}/pdf', [BulletinController::class, 'telecharger'])
     ->middleware(['auth', 'verified'])
     ->name('bulletin.pdf');
+
+// Téléchargement d'une période (plage de mois) en un seul PDF
+Route::get('/bulletins/periode', [BulletinController::class, 'telechargerPeriode'])
+    ->middleware(['auth', 'verified'])
+    ->name('bulletin.periode');
  
 // Batch PDF
 Route::post('/bulletins/batch-pdf', [BulletinController::class, 'batch'])

@@ -5,7 +5,7 @@ use App\Models\CategorieRh;
 use App\Models\Echelon;
 
 name('admin.rh.categories');
-middleware(['auth', 'verified']);
+middleware(['auth', 'verified', 'role']);
 
 new class extends Component {
 
