@@ -168,7 +168,13 @@ new class extends Component {
 
     private function chargerDonnees(): void
     {
-        $this->ues = Ue::with('cours')
+        // On filtre aussi les COURS rattachés à l'UE (pas seulement les UE).
+        // Sans ça, des cours désactivés ou rattachés à un autre examen
+        // remontaient dans le tableau avec un crédit "?" et aucune note.
+        $this->ues = Ue::with(['cours' => function ($q) {
+                $q->where('status', 'Success')
+                  ->where('examen_id', $this->examen_id);
+            }])
             ->where('specialite_id', $this->specialite_id)
             ->where('examen_id', $this->examen_id)
             ->where('status', 'Success')
@@ -220,8 +226,10 @@ new class extends Component {
                             : null;
                     }
 
-                    // Renvoi automatique au rattrapage si note CC ou Exam ≤ 5
-                    $renvoye = ($cc !== null && $cc <= 5) || ($exam !== null && $exam <= 5);
+                    // Renvoi au rattrapage : on ne juge qu'une fois l'examen saisi.
+                    // Tant que l'Exam est vide, l'évaluation est incomplète → pas de renvoi.
+                    $renvoye = ($exam !== null)
+                        && (($cc !== null && $cc <= 5) || $exam <= 5);
 
                     $this->notes[$etudiant->id][$cours->id] = [
                         'cc'         => $cc,

@@ -1,196 +1,126 @@
 <?php
 
+/**
+ * config/formations.php
+ * Données des filières utilisées par la route /formation/{slug}
+ * et la vue resources/views/formation-detail.blade.php
+ */
+
 return [
-    'agriculture-et-elevage' => [
-        'nom' => 'Agriculture et Élevage',
-        'image' => 'asset_vitrine/assets/img/update1/normal/elevage.jpg',
-        'short' => 'Apprenez à produire des cultures et à élever des animaux pour une carrière durable.',
-        'description' => "Notre filière Agriculture et Élevage forme des professionnels capables de relever les défis du secteur agricole moderne. Vous apprendrez les techniques de production végétale et animale, la gestion d'exploitation et l'agriculture durable. Cette formation combine théorie en salle et pratique sur le terrain.",
-    ],
-    'genie-electrique' => [
-        'nom' => 'Génie Électrique',
-        'image' => 'asset_vitrine/assets/img/update1/normal/electrique.jpg',
-        'short' => "Formez-vous en électricité et maintenance d'équipements industriels.",
-        'description' => "La filière Génie Électrique vous prépare aux métiers de l'installation, la maintenance et la conception des systèmes électriques. Vous maîtriserez les automatismes, l'électrotechnique industrielle et les énergies renouvelables.",
-    ],
-    'genie-civil' => [
-        'nom' => 'Génie Civil',
-        'image' => 'asset_vitrine/assets/img/update1/normal/civil.jpg',
-        'short' => 'Maîtrisez la construction et les travaux publics.',
-        'description' => "Le Génie Civil forme aux métiers du bâtiment et des travaux publics : conception de structures, suivi de chantier, métré, topographie. Vous serez préparé à intervenir sur tous types d'ouvrages.",
-    ],
-    'genie-geologique-et-petrolier' => [
-        'nom' => 'Génie Géologique et Pétrolier',
-        'image' => 'asset_vitrine/assets/img/update1/normal/petrolier.jpg',
-        'short' => 'Explorez les mines et le secteur pétrolier.',
-        'description' => "Cette filière vous forme à l'exploration et l'exploitation des ressources minières et pétrolières. Au programme : géologie, forage, production, sécurité et environnement.",
-    ],
-    'genie-mecanique-et-productique' => [
-        'nom' => 'Génie Mécanique et Productique',
-        'image' => 'asset_vitrine/assets/img/update1/normal/productique.jpg',
-        'short' => 'Spécialisez-vous en mécanique et maintenance industrielle.',
-        'description' => "Vous apprendrez la conception mécanique, l'usinage, la maintenance des équipements industriels et l'automatisation des processus de production.",
-    ],
-    'commerce-et-vente' => [
-        'nom' => 'Commerce et Vente',
-        'image' => 'asset_vitrine/assets/img/update1/normal/vente.jpg',
-        'short' => 'Développez des compétences en marketing et commerce international.',
-        'description' => "Formation aux techniques de vente, négociation, marketing digital, gestion de la relation client et commerce international.",
-    ],
+
+    // ── ISGMM ─────────────────────────────────────────────────────────────
     'gestion' => [
-        'nom' => 'Gestion',
+        'nom'   => 'Gestion',
         'image' => 'asset_vitrine/assets/img/update1/normal/gestion.jpg',
-        'short' => 'Maîtrisez la finance, la comptabilité et la gestion des ressources humaines.',
-        'description' => "Cursus complet en comptabilité, finance d'entreprise, contrôle de gestion, fiscalité et gestion des ressources humaines.",
+        'short' => "Former les gestionnaires de demain — Bâtir la gouvernance d'aujourd'hui.",
+        'description' => "La filière Gestion de l'IUM forme des professionnels polyvalents capables de gérer les ressources humaines, financières et logistiques des entreprises publiques et privées. Les programmes couvrent la comptabilité (CGE), le marketing (MCV), la banque et finance (BMF), la logistique (GLT) et le journalisme, du BTS au Master.",
     ],
-    'tourisme-et-restauration-hotellerie' => [
-        'nom' => 'Tourisme et Restauration Hôtellerie',
+
+    'commerce-et-vente' => [
+        'nom'   => 'Commerce et Vente',
+        'image' => 'asset_vitrine/assets/img/update1/normal/vente.jpg',
+        'short' => 'Marketing, commerce international et techniques de vente.',
+        'description' => "La filière Commerce et Vente forme des professionnels maîtrisant les techniques commerciales modernes : Marketing Commerce Vente (MCV), Commerce International, E-Commerce et Marketing Numérique.",
+    ],
+
+    'tourisme-et-hotellerie' => [
+        'nom'   => 'Tourisme, Hôtellerie & Restauration',
         'image' => 'asset_vitrine/assets/img/update1/normal/hotellerie.jpg',
-        'short' => 'Formez-vous au service hôtelier et à la gestion touristique.',
-        'description' => "Apprenez les métiers de l'accueil, de la restauration, de l'organisation d'événements et de la gestion d'établissements hôteliers et touristiques.",
+        'short' => 'Former les ambassadeurs du voyage, du bien-être et de la gastronomie.',
+        'description' => "La filière THR forme des professionnels de l'accueil, de la gestion hôtelière, des arts culinaires (Génie Culinaire) et de l'industrie de l'habillement (Haute Couture & Design de Mode).",
     ],
-    'economie-et-entrepreneuriat-social' => [
-        'nom' => 'Économie et Entrepreneuriat Social',
+
+    'carrieres-juridiques' => [
+        'nom'   => 'Carrières Juridiques',
         'image' => 'asset_vitrine/assets/img/update1/normal/social.jpg',
-        'short' => "Apprenez les bases de l'entrepreneuriat et des cosmétiques.",
-        'description' => "Cette filière vous prépare à créer et gérer des projets entrepreneuriaux à impact social, en alliant rentabilité économique et utilité sociétale.",
+        'short' => 'Former les juristes de demain — Bâtir le droit d\'aujourd\'hui.',
+        'description' => "La filière Droit forme des juristes compétents en droit des affaires, droit public, droit privé et sciences politiques, et propose une Capacité en Droit accessible dès le BEPC pour adultes en reconversion.",
     ],
-    'information-et-communication' => [
-        'nom' => 'Information et Communication',
-        'image' => 'asset_vitrine/assets/img/update1/normal/communication.jpg',
-        'short' => 'Développez des compétences en journalisme et communication.',
-        'description' => "Formation aux métiers du journalisme, de la communication d'entreprise, des relations publiques et de la production audiovisuelle.",
-    ],
-    'etude-medico-sanitaire' => [
-        'nom' => 'Étude Médico-Sanitaire',
-        'image' => 'asset_vitrine/assets/img/update1/normal/sanitaire.jpg',
-        'short' => "Formez-vous aux soins infirmiers et à la kinésithérapie.",
-        'description' => "Cursus complet en soins de santé : techniques de soins, prévention, éducation à la santé publique et accompagnement des patients.",
-    ],
-    'sciences-et-techniques-biomedicales' => [
-        'nom' => 'Sciences et Techniques Biomédicales',
-        'image' => 'asset_vitrine/assets/img/update1/normal/biomedicales.jpg',
-        'short' => 'Spécialisez-vous en laboratoire et radiologie.',
-        'description' => "Formation aux techniques d'analyses biomédicales, d'imagerie médicale et de manipulation des équipements médicaux.",
-    ],
+
+    // ── ISTIM ─────────────────────────────────────────────────────────────
     'genie-informatique' => [
-        'nom' => 'Génie Informatique',
+        'nom'   => 'Génie Informatique',
         'image' => 'asset_vitrine/assets/img/update1/normal/informatique.jpg',
-        'short' => 'Maîtrisez le développement logiciel et les réseaux.',
-        'description' => "Formation complète en programmation, bases de données, architecture logicielle, sécurité informatique et administration système.",
+        'short' => 'Former les ingénieurs et techniciens du numérique de demain.',
+        'description' => "La filière Génie Informatique forme des techniciens et ingénieurs maîtrisant le génie logiciel, la maintenance des systèmes (MSI), l'informatique industrielle, l'infographie et le e-commerce, du BTS à la Licence ISIR et au Master.",
     ],
+
+    'genie-electrique' => [
+        'nom'   => 'Génie Électrique',
+        'image' => 'asset_vitrine/assets/img/update1/normal/electrique.jpg',
+        'short' => 'Électrotechnique, énergies renouvelables et systèmes électroniques.',
+        'description' => "La filière Génie Électrique forme des techniciens en électrotechnique, maintenance des systèmes électroniques, énergies renouvelables et maintenance d'appareils biomédicaux.",
+    ],
+
+    'genie-mecanique-et-productique' => [
+        'nom'   => 'Génie Mécanique et Productique',
+        'image' => 'asset_vitrine/assets/img/update1/normal/productique.jpg',
+        'short' => 'Construction métallique, chaudronnerie, soudure et maintenance industrielle.',
+        'description' => "La filière Génie Mécanique et Productique forme des techniciens en construction métallique, chaudronnerie et soudure mécanique, productique et automatisme, et technologies marines marchandes.",
+    ],
+
+    'genie-civil' => [
+        'nom'   => 'Génie Civil',
+        'image' => 'asset_vitrine/assets/img/update1/normal/civil.jpg',
+        'short' => 'BTP, topographie, architecture et urbanisme.',
+        'description' => "La filière Génie Civil forme des professionnels du Bâtiment et des Travaux Publics, de la topographie et de l'architecture & urbanisme, du BTS au Master.",
+    ],
+
+    'agriculture-et-elevage' => [
+        'nom'   => 'Agriculture et Élevage',
+        'image' => 'asset_vitrine/assets/img/update1/normal/elevage.jpg',
+        'short' => 'Productions végétales, animales, agro-industrie et ressources naturelles.',
+        'description' => "La filière Agriculture et Élevage forme des techniciens agronomes en productions végétales, productions animales, agro-industrie et gestion des ressources naturelles.",
+    ],
+
     'reseaux-et-telecommunications' => [
-        'nom' => 'Réseaux et Télécommunications',
-        'image' => 'asset_vitrine/assets/img/update1/normal/telecommunications.jpg',
-        'short' => 'Formez-vous à la gestion des réseaux et à la sécurité.',
-        'description' => "Apprenez à concevoir, déployer et sécuriser des infrastructures réseau et des systèmes de télécommunications modernes.",
+        'nom'   => 'Réseaux et Télécommunications',
+        'image' => 'asset_vitrine/assets/img/update1/normal/admission_1_2.jpg',
+        'short' => 'Sécurité des réseaux, télécommunications et réseaux mobiles.',
+        'description' => "La filière Réseaux & Télécommunications forme des experts en administration système et réseaux, ingénierie télécoms et réseaux mobiles. Les diplômés intègrent les opérateurs télécoms (Orange, MTN, Camtel).",
     ],
-    'sciences-biomedicales' => [
-        'nom' => 'Sciences Biomédicales',
-        'image' => 'asset_vitrine/assets/img/update1/normal/biomedicales.jpg',
-        'short' => 'Étudiez la biologie et les techniques médicales avancées.',
-        'description' => "Étude approfondie de la biologie humaine, de la pathologie, et des techniques de laboratoire pour le diagnostic médical.",
-    ],
+
+    // ── ISSBM ─────────────────────────────────────────────────────────────
     'sciences-infirmieres' => [
-        'nom' => 'Sciences Infirmières',
+        'nom'   => 'Sciences Infirmières',
         'image' => 'asset_vitrine/assets/img/update1/normal/infirmieres.jpg',
-        'short' => "Formez-vous aux soins de santé et à l'assistance médicale.",
-        'description' => "Formation complète aux soins infirmiers, à la prise en charge globale du patient et à la coordination des soins.",
+        'short' => 'Soins de santé, assistance médicale et santé communautaire.',
+        'description' => "La filière Sciences Infirmières forme des infirmiers compétents pour assurer des soins de qualité en milieu hospitalier et communautaire, avec stages cliniques intensifs.",
     ],
-    'radiologie-et-imagerie-medicale' => [
-        'nom' => 'Radiologie et Imagerie Médicale',
-        'image' => 'asset_vitrine/assets/img/update1/normal/medicale.jpg',
-        'short' => "Spécialisez-vous dans les techniques d'imagerie médicale.",
-        'description' => "Maîtrisez les techniques de radiologie conventionnelle, scanner, IRM et échographie pour le diagnostic médical moderne.",
-    ],
-    'kinesitherapie' => [
-        'nom' => 'Kinésithérapie',
-        'image' => 'asset_vitrine/assets/img/update1/normal/kinesitherapie.jpg',
-        'short' => 'Maîtrisez les techniques de rééducation physique.',
-        'description' => "Formation aux techniques de rééducation et de réadaptation fonctionnelle pour accompagner les patients vers la récupération motrice.",
-    ],
+
     'sage-femme-maieuticien' => [
-        'nom' => 'Sage-Femme/Maïeuticien',
+        'nom'   => 'Sage-Femme / Maïeuticien',
         'image' => 'asset_vitrine/assets/img/update1/normal/maieuticien.jpg',
-        'short' => "Formez-vous aux soins prénatals et à l'accouchement.",
-        'description' => "Formation au suivi de grossesse, à la pratique de l'accouchement et au suivi post-natal de la mère et de l'enfant.",
+        'short' => 'Soins prénatals, accouchement et santé maternelle et néonatale.',
+        'description' => "La filière Sage-Femme & Maïeutique forme des professionnels de la santé maternelle et néonatale, du suivi de grossesse à l'accouchement et aux soins post-nataux.",
     ],
-    'genie-logiciel-et-developpement' => [
-        'nom' => 'Génie Logiciel et Développement',
-        'image' => 'asset_vitrine/assets/img/update1/normal/developpement.jpg',
-        'short' => 'Développez des solutions technologiques innovantes.',
-        'description' => "Apprenez à concevoir, développer et maintenir des applications web et mobiles avec les technologies les plus modernes.",
+
+    'kinesitherapie' => [
+        'nom'   => 'Kinésithérapie',
+        'image' => 'asset_vitrine/assets/img/update1/normal/kinesitherapie.jpg',
+        'short' => 'Rééducation physique, massage thérapeutique et réhabilitation motrice.',
+        'description' => "La filière Kinésithérapie & Rééducation forme des kinésithérapeutes capables d'évaluer, traiter et prévenir les troubles fonctionnels du mouvement.",
     ],
-    'intelligence-artificielle' => [
-        'nom' => 'Intelligence Artificielle',
-        'image' => 'asset_vitrine/assets/img/update1/normal/artificielle.jpg',
-        'short' => "Explorez l'IA et ses applications modernes.",
-        'description' => "Formation aux fondamentaux du machine learning, du deep learning et au développement d'applications intelligentes.",
-    ],
-    'systeme-information-et-reseaux' => [
-        'nom' => "Système d'Information et Réseaux",
-        'image' => 'asset_vitrine/assets/img/update1/normal/reseaux.jpg',
-        'short' => 'Maîtrisez la gestion des systèmes informatiques et Big Data.',
-        'description' => "Apprenez à concevoir et administrer des systèmes d'information, à gérer des bases de données et à exploiter le Big Data.",
-    ],
-    'virologie-medicale' => [
-        'nom' => 'Virologie Médicale',
-        'image' => 'asset_vitrine/assets/img/update1/normal/virologie.jpg',
-        'short' => 'Étudiez les virus et leurs impacts sur la santé.',
-        'description' => "Étude approfondie des virus humains, de leurs mécanismes d'action et des méthodes de diagnostic et de traitement.",
-    ],
-    'sante-mentale-et-reproduction-medicale' => [
-        'nom' => 'Santé Mentale et Reproduction Médicale',
-        'image' => 'asset_vitrine/assets/img/update1/normal/reproduction.jpg',
-        'short' => 'Spécialisez-vous dans la santé mentale et la reproduction.',
-        'description' => "Formation aux soins en santé mentale, psychologie clinique et médecine de la reproduction.",
-    ],
-    'radiologie' => [
-        'nom' => 'Radiologie',
+
+    'radiologie-et-imagerie-medicale' => [
+        'nom'   => 'Radiologie et Imagerie Médicale',
         'image' => 'asset_vitrine/assets/img/update1/normal/medicale.jpg',
-        'short' => "Maîtrisez les techniques avancées d'imagerie médicale.",
-        'description' => "Spécialisation poussée en techniques radiologiques pour le diagnostic et le traitement médical.",
+        'short' => 'Radiographie, scanner, IRM et échographie médicale.',
+        'description' => "La filière Radiologie & Imagerie Médicale forme des techniciens spécialisés dans les techniques avancées d'imagerie médicale : radiographie, scanner, IRM, échographie.",
     ],
-    'hematologie-clinique' => [
-        'nom' => 'Hématologie Clinique',
-        'image' => 'asset_vitrine/assets/img/update1/normal/hematologie.jpg',
-        'short' => 'Étudiez les maladies du sang et leurs traitements.',
-        'description' => "Formation aux pathologies sanguines, aux techniques d'analyse hématologique et aux protocoles de traitement.",
+
+    'sciences-et-techniques-biomedicales' => [
+        'nom'   => 'Sciences et Techniques Biomédicales',
+        'image' => 'asset_vitrine/assets/img/update1/normal/biomedicales.jpg',
+        'short' => 'Analyses biologiques, pharmacie, génie biomédical et équipements médicaux.',
+        'description' => "La filière Sciences et Techniques Biomédicales forme des professionnels en analyses biomédicales et biologiques, pharmacie et génie biomédical, ainsi qu'en maintenance des équipements médicaux.",
     ],
-    'cytopathologie' => [
-        'nom' => 'Cytopathologie',
-        'image' => 'asset_vitrine/assets/img/update1/normal/cytopathologie.jpg',
-        'short' => "Spécialisez-vous dans l'analyse cellulaire.",
-        'description' => "Étude des cellules et tissus à des fins de diagnostic, notamment pour la détection précoce des cancers.",
+
+    'etude-medico-sanitaire' => [
+        'nom'   => 'Étude Médico-Sanitaire',
+        'image' => 'asset_vitrine/assets/img/update1/normal/sanitaire.jpg',
+        'short' => 'Santé communautaire, nutrition, diététique et odontostomatologie.',
+        'description' => "La filière Étude Médico-Sanitaire forme des professionnels de la santé publique et communautaire : nutrition et diététique, odontostomatologie et épidémiologie de terrain.",
     ],
-    'biologie-clinique' => [
-        'nom' => 'Biologie Clinique',
-        'image' => 'asset_vitrine/assets/img/update1/normal/clinique.jpg',
-        'short' => 'Formez-vous aux analyses biologiques avancées.',
-        'description' => "Formation complète aux analyses biologiques médicales : biochimie, hématologie, microbiologie et immunologie.",
-    ],
-    'bacteriologie-medicale' => [
-        'nom' => 'Bactériologie Médicale',
-        'image' => 'asset_vitrine/assets/img/update1/normal/bacteriologie.jpg',
-        'short' => 'Étudiez les bactéries et leur impact médical.',
-        'description' => "Étude des bactéries pathogènes, des infections bactériennes et des méthodes de diagnostic microbiologique.",
-    ],
-    'assistant-bloc-operatoire' => [
-        'nom' => 'Assistant Bloc Opératoire',
-        'image' => 'asset_vitrine/assets/img/update1/normal/operatoire.jpg',
-        'short' => 'Assistez aux interventions chirurgicales avec expertise.',
-        'description' => "Formation aux techniques d'assistance chirurgicale, à la stérilisation et à la gestion du bloc opératoire.",
-    ],
-    'assistant-orl' => [
-        'nom' => 'Assistant ORL',
-        'image' => 'asset_vitrine/assets/img/update1/normal/orl.jpg',
-        'short' => 'Spécialisez-vous dans les soins ORL (oto-rhino-laryngologie).',
-        'description' => "Formation aux techniques d'assistance en oto-rhino-laryngologie : examens, soins et accompagnement des patients.",
-    ],
-    'assistant-ophtalmologie' => [
-        'nom' => 'Assistant Ophtalmologie',
-        'image' => 'asset_vitrine/assets/img/update1/normal/ophtamologie.jpg',
-        'short' => "Formez-vous aux soins des yeux et à l'optique.",
-        'description' => "Formation aux techniques d'examen ophtalmologique, à l'optique médicale et à l'accompagnement des patients.",
-    ],
+
 ];

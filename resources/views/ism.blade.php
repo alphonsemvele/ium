@@ -178,8 +178,8 @@
     /* GALERIE */
     .gallery-card{border-radius:var(--r-md);overflow:hidden;}
     .gallery-img{position:relative;overflow:hidden;}
-    .gallery-img img{width:100%;height:210px;object-fit:cover;transition:transform .38s ease;}
-    .gallery-card:hover .gallery-img img{transform:scale(1.07);}
+    .gallery-img img{width:100%;height:230px;object-fit:cover;transition:transform .38s ease;}
+    .gallery-card:hover .gallery-img img{transform:scale(1.05);}
     .gallery-btn{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(30,58,138,.55);opacity:0;transition:opacity var(--t);color:var(--white)!important;font-size:1.35rem;}
     .gallery-btn i{color:var(--white)!important;}
     .gallery-card:hover .gallery-btn{opacity:1;}
@@ -208,8 +208,8 @@
 
     /* CONTACT */
     .contact-feature{display:flex;gap:14px;margin-bottom:20px;align-items:flex-start;}
-    .contact-feature-icon{width:42px;height:42px;min-width:42px;border-radius:50%;background:var(--blue);display:flex;align-items:center;justify-content:center;color:var(--white)!important;flex-shrink:0;align-self:flex-start;}
-    .contact-feature-icon i{color:var(--white)!important;font-size:.95rem;}
+    .contact-feature-icon{width:42px;height:42px;min-width:42px;border-radius:50%;background:#1e3a8a!important;display:flex;align-items:center;justify-content:center;color:#ffffff!important;flex-shrink:0;align-self:flex-start;}
+    .contact-feature-icon i{color:#ffffff!important;font-size:.95rem;}
     .contact-feature_label{font-size:.76rem;font-weight:600;color:var(--blue);text-transform:uppercase;letter-spacing:.6px;margin:0 0 3px;}
     .contact-feature_link{font-size:.87rem;color:var(--g700);display:block;line-height:1.55;}
     .contact-form-wrap{background:var(--white);border-radius:var(--r-lg);padding:30px 26px;box-shadow:var(--sh-md);border:1px solid var(--g200);}
@@ -324,7 +324,7 @@
 <!-- MOBILE MENU -->
 <div class="th-menu-wrapper">
     <div class="th-menu-area" style="padding:20px 16px;">
-        <button class="th-menu-toggle" style="margin-bottom:16px;"><i class="fal fa-times"></i> Fermer</button>
+        <button class="th-menu-toggle" style="margin-bottom:16px;"><i class="fas fa-times"></i> Fermer</button>
         <div style="text-align:center;margin-bottom:16px;">
             <img src="{{ asset('images/logo.png') }}" style="height:50px;width:auto;margin:0 auto;" alt="IUM">
         </div>
@@ -344,7 +344,7 @@
         <div class="container">
             <ul class="htop-info">
                 <li><i class="fas fa-envelope"></i> info@ium-ndazoa.com</li>
-                <li><i class="fas fa-phone"></i> +237 691 612 145 &nbsp;|&nbsp; 695 830 031</li>
+                <li><i class="fas fa-phone"></i> +237 655 34 19 39</li>
             </ul>
             <div style="display:flex;align-items:center;gap:14px;">
                 <div class="h-social">
@@ -586,7 +586,7 @@
                         <i class="fas fa-bus" style="color:#fff!important;font-size:1.1rem;"></i>
                     </div>
                     <h4 style="font-size:.95rem;font-weight:700;color:var(--g900);margin-bottom:8px;">Scolarité tout inclus</h4>
-                    <p style="font-size:.84rem;color:var(--g500);margin:0;">1 000 000 FCFA/an couvre : pension, transport, assurance, uniforme, kit matériel professionnel et restaurant universitaire.</p>
+                    <p style="font-size:.84rem;color:var(--g500);margin:0;">Pension, transport, assurance, uniforme, kit matériel professionnel et restaurant universitaire.</p>
                 </div>
             </div>
             <div class="col-md-4" data-aos="fade-up" data-aos-delay="200">
@@ -915,7 +915,7 @@
              'debouches'=>['Guide de tourisme','Receptionniste hotelier','Maitre cuisinier','Styliste-modeliste','Gouvernant(e)'],
              'coord'=>'Mme NOA Josephine — 658 877 250'],
             ['img'=>'social.jpg',
-             'title'=>'Carrieres Juridiques','slug'=>'economie-et-entrepreneuriat-social','inst'=>'ISGMM','color'=>'#1e3a8a',
+             'title'=>'Carrieres Juridiques','slug'=>'carrieres-juridiques','inst'=>'ISGMM','color'=>'#1e3a8a',
              'desc'=>'Droit des affaires, droit public, sciences politiques et capacite en droit — accessible des le BEPC.',
              'bts'=>['BTS Droit des Affaires','BTS Assistant Judiciaire','Capacite en Droit (des le BEPC)','L1 a L3 Droit des Affaires','L1 a L3 Sciences Politiques'],
              'debouches'=>['Avocat / Notaire','Juriste d\'entreprise','Magistrat','Fonctionnaire diplomatique','Greffier'],
@@ -1234,8 +1234,6 @@
                 </div>
             </div>
             @endforeach
-            {{-- Carte contact coordinateurs --}}
-         
         </div>
     </div>
 </section>
@@ -1300,7 +1298,20 @@
     <div class="container">
         <div class="row gy-4 align-items-center">
             <div class="col-lg-7 order-lg-2">
-                <img src="{{ asset('asset_vitrine/assets/img/normal/video1.png') }}" alt="Espace étudiant" style="border-radius:var(--r-lg);box-shadow:var(--sh-lg);width:100%;">
+                {{-- Mini-galerie : 1 grande image + 2 petites empilées --}}
+                <div style="display:grid;grid-template-columns:1.4fr 1fr;gap:12px;">
+                    <img src="{{ asset('asset_vitrine/assets/img/update1/normal/espace_etudiant_1.jpeg') }}"
+                         alt="Espace étudiant - salle de cours"
+                         style="border-radius:var(--r-lg);box-shadow:var(--sh-lg);width:100%;height:100%;min-height:280px;object-fit:cover;">
+                    <div style="display:grid;grid-template-rows:1fr 1fr;gap:12px;">
+                        <img src="{{ asset('asset_vitrine/assets/img/update1/normal/espace_etudiant_2.jpeg') }}"
+                             alt="Espace étudiant - bibliothèque"
+                             style="border-radius:var(--r-md);box-shadow:var(--sh-md);width:100%;height:100%;min-height:134px;object-fit:cover;">
+                        <img src="{{ asset('asset_vitrine/assets/img/update1/normal/espace_etudiant_3.jpeg') }}"
+                             alt="Espace étudiant - espace détente"
+                             style="border-radius:var(--r-md);box-shadow:var(--sh-md);width:100%;height:100%;min-height:134px;object-fit:cover;">
+                    </div>
+                </div>
             </div>
             <div class="col-lg-5 order-lg-1">
                 <h2 class="sec-title">Espace et cadre propice dédiés aux étudiants</h2>
@@ -1443,14 +1454,14 @@
                     <h2 class="border-title">Une question ?</h2>
                     <p style="margin-bottom:26px;color:var(--g500);font-size:.9rem;">Notre équipe répond rapidement à toutes vos demandes.</p>
                     <div class="contact-feature">
-                        <div class="contact-feature-icon"><i class="fal fa-location-dot"></i></div>
+                        <div class="contact-feature-icon" style="background:#1e3a8a;color:#fff;"><i class="fas fa-location-dot"></i></div>
                         <div>
                             <p class="contact-feature_label">Notre adresse</p>
                             <span class="contact-feature_link">Ndazoa, 7 km de Mbankomo — station Green Oil, route nationale Yaoundé-Douala, entrée à droite (panneau IUM).</span>
                         </div>
                     </div>
                     <div class="contact-feature">
-                        <div class="contact-feature-icon"><i class="fal fa-phone"></i></div>
+                        <div class="contact-feature-icon" style="background:#1e3a8a;color:#fff;"><i class="fas fa-phone"></i></div>
                         <div>
                             <p class="contact-feature_label">Téléphone</p>
                             <span class="contact-feature_link">+237 655 34 19 39</span>
@@ -1458,7 +1469,7 @@
                         </div>
                     </div>
                     <div class="contact-feature">
-                        <div class="contact-feature-icon"><i class="fal fa-clock"></i></div>
+                        <div class="contact-feature-icon" style="background:#1e3a8a;color:#fff;"><i class="fas fa-clock"></i></div>
                         <div>
                             <p class="contact-feature_label">Horaires d'ouverture</p>
                             <span class="contact-feature_link">Lundi – Vendredi : 08h00 – 17h00</span>
@@ -1474,8 +1485,8 @@
                     <p style="margin-bottom:22px;color:var(--g500);font-size:.88rem;">Nous sommes là pour répondre à toutes vos questions.</p>
                     <form>
                         <div class="row">
-                            <div class="col-md-6"><div class="form-group"><input type="text" class="form-control style-white" name="name" placeholder="Votre nom *"><i class="fal fa-user"></i></div></div>
-                            <div class="col-md-6"><div class="form-group"><input type="email" class="form-control style-white" name="email" placeholder="Adresse e-mail *"><i class="fal fa-envelope"></i></div></div>
+                            <div class="col-md-6"><div class="form-group"><input type="text" class="form-control style-white" name="name" placeholder="Votre nom *"><i class="fas fa-user"></i></div></div>
+                            <div class="col-md-6"><div class="form-group"><input type="email" class="form-control style-white" name="email" placeholder="Adresse e-mail *"><i class="fas fa-envelope"></i></div></div>
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <select name="subject" class="form-control style-white">
@@ -1487,8 +1498,8 @@
                                     </select>
                                 </div>
                             </div>
-                            <div class="col-md-6"><div class="form-group"><input type="tel" class="form-control style-white" name="number" placeholder="Téléphone *"><i class="fal fa-phone"></i></div></div>
-                            <div class="col-12"><div class="form-group"><textarea name="message" rows="4" class="form-control style-white" placeholder="Votre message *"></textarea><i class="fal fa-pen"></i></div></div>
+                            <div class="col-md-6"><div class="form-group"><input type="tel" class="form-control style-white" name="number" placeholder="Téléphone *"><i class="fas fa-phone"></i></div></div>
+                            <div class="col-12"><div class="form-group"><textarea name="message" rows="4" class="form-control style-white" placeholder="Votre message *"></textarea><i class="fas fa-pen"></i></div></div>
                             <div class="col-12"><button type="submit" class="th-btn">Envoyer le message <i class="fas fa-arrow-right"></i></button></div>
                         </div>
                     </form>
@@ -1559,8 +1570,8 @@
             <div class="col-md-6 col-xl-3" data-aos="fade-up" data-aos-delay="230">
                 <h3 class="widget_title">Contactez-nous</h3>
                 <div class="info-box"><div class="info-box_icon"><i class="fas fa-location-dot"></i></div><p class="info-box_text">Ndazoa, 7 km de Mbankomo, station Green Oil, route Yaoundé-Douala.</p></div>
-                <div class="info-box"><div class="info-box_icon"><i class="fas fa-phone"></i></div><div><p class="info-box_text"><a href="tel:+237655341939">+237 655 34 19 39</a></p><p class="info-box_text"><a href="tel:+237695830031">+237 695 830 031</a></p></div></div>
-                <div class="info-box"><div class="info-box_icon"><i class="fas fa-globe"></i></div><p class="info-box_text"><a href="http://www.ism-ndazoa.com">@ism-ndazoa.com</a></p></div>
+                <div class="info-box"><div class="info-box_icon"><i class="fas fa-phone"></i></div><div><p class="info-box_text"><a href="tel:+237655341939">+237 655 34 19 39</a></p></div></div>
+                <div class="info-box"><div class="info-box_icon"><i class="fas fa-globe"></i></div><p class="info-box_text"><a href="http://www.ium-ndazoa.com">@ium-ndazoa.com</a></p></div>
             </div>
         </div>
     </div>
@@ -1568,7 +1579,7 @@
         <div class="container">
             <div class="row align-items-center">
                 <div class="col-md-6">
-                    <p class="copyright-text">© 2026 <a href="#">Institut Universitaire la Majestueuse</a>. Tous droits réservés.</p>
+                    <p class="copyright-text">© 2026 <a href="#">Institut Universitaire la Majestueuse de Ndazoa</a>. Tous droits réservés.</p>
                 </div>
                 <div class="col-md-6">
                     <div class="footer-links"><ul><li><a href="#">Confidentialité</a></li><li><a href="#">Conditions d'utilisation</a></li></ul></div>
