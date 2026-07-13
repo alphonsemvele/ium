@@ -57,10 +57,10 @@ class PaiementSalaire extends Model
     public function getMoisNomAttribute(): string
     {
         $mois = [
-            1 => 'Janvier', 2 => 'Février',   3 => 'Mars',
+            1 => 'Janvier', 2 => 'FÃ©vrier',   3 => 'Mars',
             4 => 'Avril',   5 => 'Mai',        6 => 'Juin',
-            7 => 'Juillet', 8 => 'Août',       9 => 'Septembre',
-            10 => 'Octobre',11 => 'Novembre',  12 => 'Décembre',
+            7 => 'Juillet', 8 => 'AoÃ»t',       9 => 'Septembre',
+            10 => 'Octobre',11 => 'Novembre',  12 => 'DÃ©cembre',
         ];
         return $mois[$this->mois] ?? '';
     }
@@ -69,8 +69,8 @@ class PaiementSalaire extends Model
     {
         return match($this->statut) {
             'en_attente' => ['label' => 'En attente', 'bg' => '#fef9c3', 'color' => '#92400e'],
-            'valide'     => ['label' => 'Validé',     'bg' => '#dbeafe', 'color' => '#1d4ed8'],
-            'paye'       => ['label' => 'Payé',       'bg' => '#dcfce7', 'color' => '#15803d'],
+            'valide'     => ['label' => 'ValidÃ©',     'bg' => '#dbeafe', 'color' => '#1d4ed8'],
+            'paye'       => ['label' => 'PayÃ©',       'bg' => '#dcfce7', 'color' => '#15803d'],
             default      => ['label' => $this->statut,'bg' => '#f3f4f6', 'color' => '#374151'],
         };
     }
