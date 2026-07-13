@@ -242,8 +242,8 @@ body {
             @foreach ($indemnites as $ind)
                 <tr>
                     <td>{{ $ind['libelle'] }}</td>
-                    <td class="center"><span class="badge-fixe">{{ $ind['type'] === 'fixe' ? 'Fixe' : 'Pourcentage' }}</span></td>
-                    <td class="right">{{ $ind['type'] === 'fixe' ? '—' : $ind['valeur'].'%' }}</td>
+                    <td class="center"><span class="badge-fixe">{{ in_array($ind['type'], ['ajustement','ajustement_pct']) ? 'Ajustement' : ($ind['type'] === 'fixe' ? 'Fixe' : 'Pourcentage') }}</span></td>
+                    <td class="right">{{ in_array($ind['type'], ['fixe','ajustement']) ? '—' : $ind['valeur'].'%' }}</td>
                     <td class="right amount-pos">+{{ number_format($ind['montant'], 0, ',', ' ') }}</td>
                 </tr>
             @endforeach
@@ -267,8 +267,8 @@ body {
             @foreach ($retenues as $ret)
                 <tr>
                     <td>{{ $ret['libelle'] }}</td>
-                    <td class="center"><span class="badge-fixe">{{ $ret['type'] === 'fixe' ? 'Fixe' : 'Pourcentage' }}</span></td>
-                    <td class="right">{{ $ret['type'] === 'fixe' ? '—' : $ret['valeur'].'%' }}</td>
+                    <td class="center"><span class="badge-fixe">{{ in_array($ret['type'], ['ajustement','ajustement_pct']) ? 'Ajustement' : ($ret['type'] === 'fixe' ? 'Fixe' : 'Pourcentage') }}</span></td>
+                    <td class="right">{{ in_array($ret['type'], ['fixe','ajustement']) ? '—' : $ret['valeur'].'%' }}</td>
                     <td class="right amount-neg">-{{ number_format($ret['montant'], 0, ',', ' ') }}</td>
                 </tr>
             @endforeach

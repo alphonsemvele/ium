@@ -4,6 +4,7 @@ use Livewire\Volt\Component;
 use App\Models\PaiementSalaire;
 use App\Models\User;
 use App\Models\Echelon;
+use App\Models\AjustementSalaire;
 use Illuminate\Support\Facades\Auth;
 
 name('admin.paie');
@@ -29,6 +30,19 @@ new class extends Component {
 
     public bool   $showPreview    = false;
     public ?int   $previewId      = null;
+
+    // ── Ajustements (bonus / retenues ponctuels) ──────────────────
+    public bool   $showAjustModal = false;
+    public ?int   $ajustUserId    = null;
+    public string $ajustUserName  = '';
+    public string $ajustType      = 'bonus';   // bonus | retenue
+    public string $ajustMode      = 'fixe';    // fixe (FCFA) | pourcentage (% du salaire de base)
+    public string $ajustLibelle   = '';
+    public        $ajustMontant   = '';
+    public string $ajustMotif     = '';
+    // Portée : ce mois uniquement, ou une plage de mois
+    public string $ajustPortee    = 'mois';    // mois | plage
+    public        $ajustMoisDebut, $ajustAnneeDebut, $ajustMoisFin, $ajustAnneeFin;
 
     public function mount(): void
     {
@@ -69,43 +83,19 @@ new class extends Component {
 
         $count = 0;
         foreach ($this->employes as $emp) {
-            $profil  = $emp->profilSalaire;
-            $echelon = $emp->echelon ?? $profil?->echelon;
-            $base    = $echelon ? (float) $echelon->salaire : 0;
-
-            $indemnites = [];
-            $retenues   = [];
-            $totalInd   = 0;
-            $totalRet   = 0;
-
-            if ($profil) {
-                foreach ($profil->indemnites as $ind) {
-                    $montant = $ind->pivot->type_calcul === 'fixe'
-                        ? $ind->pivot->value
-                        : round($base * $ind->pivot->value / 100);
-                    $totalInd += $montant;
-                    $indemnites[] = ['libelle' => $ind->libelle, 'type' => $ind->pivot->type_calcul, 'valeur' => $ind->pivot->value, 'montant' => $montant];
-                }
-                foreach ($profil->retenues as $ret) {
-                    $montant = $ret->pivot->type_calcul === 'fixe'
-                        ? $ret->pivot->value
-                        : round($base * $ret->pivot->value / 100);
-                    $totalRet += $montant;
-                    $retenues[] = ['libelle' => $ret->libelle, 'type' => $ret->pivot->type_calcul, 'valeur' => $ret->pivot->value, 'montant' => $montant];
-                }
-            }
+            $c = $this->calculer($emp);
 
             PaiementSalaire::create([
                 'user_id'           => $emp->id,
-                'profil_salaire_id' => $profil?->id,
-                'echelon_id'        => $echelon?->id,
+                'profil_salaire_id' => $c['profil']?->id,
+                'echelon_id'        => $c['echelon']?->id,
                 'mois'              => $this->mois,
                 'annee'             => $this->annee,
-                'salaire_base'      => $base,
-                'total_indemnites'  => $totalInd,
-                'total_retenues'    => $totalRet,
-                'salaire_net'       => $base + $totalInd - $totalRet,
-                'detail_json'       => ['indemnites' => $indemnites, 'retenues' => $retenues],
+                'salaire_base'      => $c['base'],
+                'total_indemnites'  => $c['totalInd'],
+                'total_retenues'    => $c['totalRet'],
+                'salaire_net'       => $c['net'],
+                'detail_json'       => ['indemnites' => $c['indemnites'], 'retenues' => $c['retenues']],
                 'statut'            => 'en_attente',
             ]);
             $count++;
@@ -113,6 +103,180 @@ new class extends Component {
 
         $this->charger();
         $this->toast("{$count} fiche(s) générée(s) pour " . $this->nomMois() . " {$this->annee}.");
+    }
+
+    /**
+     * Calcule le détail de paie d'un employé pour le mois courant :
+     * base (échelon) + indemnités/retenues du profil + ajustements ponctuels.
+     */
+    private function calculer($emp): array
+    {
+        $profil  = $emp->profilSalaire;
+        $echelon = $emp->echelon ?? $profil?->echelon;
+        $base    = $echelon ? (float) $echelon->salaire : 0;
+
+        $indemnites = []; $retenues = []; $totalInd = 0; $totalRet = 0;
+
+        if ($profil) {
+            foreach ($profil->indemnites as $ind) {
+                $montant = $ind->pivot->type_calcul === 'fixe' ? $ind->pivot->value : round($base * $ind->pivot->value / 100);
+                $totalInd += $montant;
+                $indemnites[] = ['libelle' => $ind->libelle, 'type' => $ind->pivot->type_calcul, 'valeur' => $ind->pivot->value, 'montant' => $montant];
+            }
+            foreach ($profil->retenues as $ret) {
+                $montant = $ret->pivot->type_calcul === 'fixe' ? $ret->pivot->value : round($base * $ret->pivot->value / 100);
+                $totalRet += $montant;
+                $retenues[] = ['libelle' => $ret->libelle, 'type' => $ret->pivot->type_calcul, 'valeur' => $ret->pivot->value, 'montant' => $montant];
+            }
+        }
+
+        // Ajustements du mois (bonus / retenues ponctuels : retard, prime…)
+        foreach (AjustementSalaire::where('user_id', $emp->id)->periode($this->mois, $this->annee)->get() as $aj) {
+            $ligne = $this->ligneAjustement($aj, $base);
+            if ($aj->type === 'bonus') { $totalInd += $ligne['montant']; $indemnites[] = $ligne; }
+            else { $totalRet += $ligne['montant']; $retenues[] = $ligne; }
+        }
+
+        return [
+            'echelon' => $echelon, 'profil' => $profil, 'base' => $base,
+            'indemnites' => $indemnites, 'retenues' => $retenues,
+            'totalInd' => $totalInd, 'totalRet' => $totalRet, 'net' => $base + $totalInd - $totalRet,
+        ];
+    }
+
+    /** Construit la ligne d'un ajustement (fixe en FCFA ou % du salaire de base). */
+    private function ligneAjustement($aj, float $base): array
+    {
+        $pct     = $aj->mode === 'pourcentage';
+        $montant = $pct ? round($base * $aj->montant / 100) : (float) $aj->montant;
+        return [
+            'libelle' => $aj->libelle,
+            'type'    => $pct ? 'ajustement_pct' : 'ajustement',
+            'valeur'  => $aj->montant,   // % ou FCFA saisi
+            'montant' => $montant,       // montant effectif en FCFA
+        ];
+    }
+
+    /**
+     * Met à jour le bulletin (s'il existe et n'est pas payé) en préservant le
+     * "snapshot" du profil : on ne touche pas à la base ni aux indemnités/retenues
+     * du profil, on ne fait que (ré)appliquer les lignes d'AJUSTEMENT du mois.
+     */
+    private function recalculerPourUser(int $userId, ?int $mois = null, ?int $annee = null): void
+    {
+        $mois  = $mois  ?? $this->mois;
+        $annee = $annee ?? $this->annee;
+
+        $p = PaiementSalaire::where('user_id', $userId)
+            ->where('mois', $mois)->where('annee', $annee)->first();
+        if (!$p || $p->statut === 'paye') return;
+
+        $detail = $p->detail_json ?? ['indemnites' => [], 'retenues' => []];
+
+        // On garde uniquement les lignes du profil (figées à la génération).
+        $estAjustement = fn($x) => in_array($x['type'] ?? '', ['ajustement', 'ajustement_pct'], true);
+        $ind = array_values(array_filter($detail['indemnites'] ?? [], fn($x) => !$estAjustement($x)));
+        $ret = array_values(array_filter($detail['retenues'] ?? [], fn($x) => !$estAjustement($x)));
+
+        $base     = (float) $p->salaire_base;
+        $totalInd = array_sum(array_column($ind, 'montant'));
+        $totalRet = array_sum(array_column($ret, 'montant'));
+
+        // On (ré)ajoute les ajustements ponctuels du mois (le % est calculé sur la base figée).
+        foreach (AjustementSalaire::where('user_id', $userId)->periode($mois, $annee)->get() as $aj) {
+            $ligne = $this->ligneAjustement($aj, $base);
+            if ($aj->type === 'bonus') { $totalInd += $ligne['montant']; $ind[] = $ligne; }
+            else { $totalRet += $ligne['montant']; $ret[] = $ligne; }
+        }
+
+        $p->update([
+            'total_indemnites' => $totalInd,
+            'total_retenues'   => $totalRet,
+            'salaire_net'      => $base + $totalInd - $totalRet,
+            'detail_json'      => ['indemnites' => $ind, 'retenues' => $ret],
+        ]);
+    }
+
+    // ── Gestion des ajustements ───────────────────────────────────
+    public function ouvrirAjustements(int $userId): void
+    {
+        $u = User::find($userId);
+        $this->ajustUserId   = $userId;
+        $this->ajustUserName = $u ? trim(strtoupper($u->name) . ' ' . $u->lastname) : '';
+        $this->ajustType     = 'bonus';
+        $this->ajustMode     = 'fixe';
+        $this->ajustPortee   = 'mois';
+        $this->ajustMoisDebut  = $this->mois;
+        $this->ajustAnneeDebut = $this->annee;
+        $this->ajustMoisFin    = $this->mois;
+        $this->ajustAnneeFin   = $this->annee;
+        $this->reset(['ajustLibelle', 'ajustMontant', 'ajustMotif']);
+        $this->showAjustModal = true;
+    }
+
+    public function getAjustementsProperty()
+    {
+        return $this->ajustUserId
+            ? AjustementSalaire::where('user_id', $this->ajustUserId)->periode($this->mois, $this->annee)->orderByDesc('id')->get()
+            : collect();
+    }
+
+    public function ajouterAjustement(): void
+    {
+        $estPct = $this->ajustMode === 'pourcentage';
+        $this->validate([
+            'ajustType'    => 'required|in:bonus,retenue',
+            'ajustMode'    => 'required|in:fixe,pourcentage',
+            'ajustPortee'  => 'required|in:mois,plage',
+            'ajustLibelle' => 'required|string|max:255',
+            'ajustMontant' => $estPct ? 'required|numeric|min:0.01|max:100' : 'required|numeric|min:1',
+        ], [], ['ajustLibelle' => 'libellé', 'ajustMontant' => $estPct ? 'pourcentage' : 'montant']);
+
+        // Détermine les mois concernés (ce mois, ou une plage sur un/plusieurs an(s)).
+        if ($this->ajustPortee === 'plage') {
+            $start = (int) $this->ajustAnneeDebut * 12 + (int) $this->ajustMoisDebut;
+            $end   = (int) $this->ajustAnneeFin   * 12 + (int) $this->ajustMoisFin;
+            if ($start > $end) [$start, $end] = [$end, $start];
+            $periodes = [];
+            for ($i = $start; $i <= $end; $i++) {
+                $periodes[] = [(($i - 1) % 12) + 1, intdiv($i - 1, 12)];
+            }
+        } else {
+            $periodes = [[$this->mois, $this->annee]];
+        }
+
+        foreach ($periodes as [$m, $a]) {
+            AjustementSalaire::create([
+                'user_id'    => $this->ajustUserId,
+                'mois'       => $m,
+                'annee'      => $a,
+                'type'       => $this->ajustType,
+                'mode'       => $this->ajustMode,
+                'libelle'    => $this->ajustLibelle,
+                'montant'    => $this->ajustMontant,
+                'motif'      => $this->ajustMotif ?: null,
+                'created_by' => Auth::id(),
+            ]);
+            $this->recalculerPourUser($this->ajustUserId, $m, $a);
+        }
+
+        $this->reset(['ajustLibelle', 'ajustMontant', 'ajustMotif']);
+        $this->ajustType = 'bonus';
+        $this->ajustMode = 'fixe';
+        $this->ajustPortee = 'mois';
+        $this->charger();
+        $this->toast(count($periodes) > 1 ? count($periodes) . ' mois ajustés.' : 'Ajustement appliqué.');
+    }
+
+    public function supprimerAjustement(int $id): void
+    {
+        $aj = AjustementSalaire::find($id);
+        if (!$aj) return;
+        $userId = $aj->user_id;
+        $aj->delete();
+        $this->recalculerPourUser($userId);
+        $this->charger();
+        $this->toast('Ajustement supprimé.');
     }
 
     // ── Valider un seul ───────────────────────────────────────────
@@ -443,6 +607,15 @@ new class extends Component {
                                             title="Prévisualiser bulletin A4">
                                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
                                         </button>
+                                        {{-- Ajustements (bonus / retenue) --}}
+                                        @if ($p->statut !== 'paye')
+                                            <button wire:click="ouvrirAjustements({{ $p->employe->id }})"
+                                                class="inline-flex items-center gap-1 text-xs font-semibold px-2.5 py-1.5 rounded-lg text-white"
+                                                style="background:#7c3aed;" title="Bonus / Retenue">
+                                                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"/></svg>
+                                                Ajust.
+                                            </button>
+                                        @endif
                                         {{-- Note --}}
                                         <button wire:click="ouvrirNote({{ $p->id }})"
                                             class="w-8 h-8 rounded-lg bg-gray-100 hover:bg-yellow-100 flex items-center justify-center text-gray-500 hover:text-yellow-600 transition"
@@ -568,6 +741,141 @@ new class extends Component {
         </div>
     </div>
 
+
+    {{-- ══ Modal AJUSTEMENTS (bonus / retenue) ══ --}}
+    <div class="fixed inset-0 z-50 overflow-y-auto" style="{{ $showAjustModal ? 'background:rgba(0,0,0,0.6);' : 'display:none;' }}">
+        <div class="flex min-h-full items-center justify-center p-4">
+            <div class="bg-white rounded-2xl shadow-2xl w-full max-w-lg">
+                <div class="px-6 py-5 rounded-t-2xl flex items-center justify-between" style="background:#7c3aed;">
+                    <div>
+                        <h3 class="font-bold text-white">Ajustements de salaire</h3>
+                        <p class="text-xs text-white/80">{{ $ajustUserName }} — {{ $this->nomMois() }} {{ $annee }}</p>
+                    </div>
+                    <button wire:click="$set('showAjustModal', false)" class="text-white opacity-80 hover:opacity-100">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+                    </button>
+                </div>
+
+                <div class="p-6">
+                    {{-- Formulaire d'ajout --}}
+                    <div class="grid grid-cols-2 gap-3">
+                        <div class="col-span-2 flex gap-2">
+                            <button type="button" wire:click="$set('ajustType','bonus')"
+                                class="flex-1 py-2 rounded-lg text-sm font-semibold border {{ $ajustType === 'bonus' ? 'bg-emerald-600 text-white border-emerald-600' : 'bg-white text-gray-600 border-gray-300' }}">
+                                + Bonus
+                            </button>
+                            <button type="button" wire:click="$set('ajustType','retenue')"
+                                class="flex-1 py-2 rounded-lg text-sm font-semibold border {{ $ajustType === 'retenue' ? 'bg-red-600 text-white border-red-600' : 'bg-white text-gray-600 border-gray-300' }}">
+                                − Retenue
+                            </button>
+                        </div>
+                        <div class="col-span-2 flex gap-2">
+                            <button type="button" wire:click="$set('ajustMode','fixe')"
+                                class="flex-1 py-1.5 rounded-lg text-xs font-semibold border {{ $ajustMode === 'fixe' ? 'bg-violet-600 text-white border-violet-600' : 'bg-white text-gray-600 border-gray-300' }}">
+                                Montant fixe (FCFA)
+                            </button>
+                            <button type="button" wire:click="$set('ajustMode','pourcentage')"
+                                class="flex-1 py-1.5 rounded-lg text-xs font-semibold border {{ $ajustMode === 'pourcentage' ? 'bg-violet-600 text-white border-violet-600' : 'bg-white text-gray-600 border-gray-300' }}">
+                                % du salaire de base
+                            </button>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-medium text-gray-500 mb-1">Libellé</label>
+                            <input type="text" wire:model="ajustLibelle" placeholder="{{ $ajustType === 'bonus' ? 'Prime de rendement…' : 'Retard, absence…' }}"
+                                class="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-violet-400">
+                            @error('ajustLibelle') <span class="text-xs text-red-500">{{ $message }}</span> @enderror
+                        </div>
+                        <div>
+                            <label class="block text-xs font-medium text-gray-500 mb-1">{{ $ajustMode === 'pourcentage' ? 'Pourcentage (%)' : 'Montant (FCFA)' }}</label>
+                            <input type="number" wire:model="ajustMontant" min="0" step="{{ $ajustMode === 'pourcentage' ? '0.01' : '1' }}" placeholder="0"
+                                class="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-violet-400">
+                            @error('ajustMontant') <span class="text-xs text-red-500">{{ $message }}</span> @enderror
+                        </div>
+                        <div class="col-span-2">
+                            <label class="block text-xs font-medium text-gray-500 mb-1">Motif (optionnel)</label>
+                            <input type="text" wire:model="ajustMotif" placeholder="Précision…"
+                                class="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-violet-400">
+                        </div>
+                    </div>
+
+                    {{-- Portée : ce mois ou plusieurs mois --}}
+                    @php $moisListe = ['','Janvier','Février','Mars','Avril','Mai','Juin','Juillet','Août','Septembre','Octobre','Novembre','Décembre']; @endphp
+                    <div class="mt-4">
+                        <p class="text-xs font-medium text-gray-500 mb-1">Appliquer à</p>
+                        <div class="flex gap-2">
+                            <button type="button" wire:click="$set('ajustPortee','mois')"
+                                class="flex-1 py-1.5 rounded-lg text-xs font-semibold border {{ $ajustPortee === 'mois' ? 'bg-gray-800 text-white border-gray-800' : 'bg-white text-gray-600 border-gray-300' }}">
+                                Ce mois ({{ $this->nomMois() }} {{ $annee }})
+                            </button>
+                            <button type="button" wire:click="$set('ajustPortee','plage')"
+                                class="flex-1 py-1.5 rounded-lg text-xs font-semibold border {{ $ajustPortee === 'plage' ? 'bg-gray-800 text-white border-gray-800' : 'bg-white text-gray-600 border-gray-300' }}">
+                                Plusieurs mois
+                            </button>
+                        </div>
+                        @if ($ajustPortee === 'plage')
+                            <div class="grid grid-cols-2 gap-3 mt-3">
+                                <div>
+                                    <label class="block text-[10px] font-bold text-gray-400 uppercase mb-1">Du</label>
+                                    <div class="flex gap-2">
+                                        <select wire:model="ajustMoisDebut" class="flex-1 px-2 py-1.5 text-xs border border-gray-300 rounded-lg bg-white">
+                                            @foreach ($moisListe as $n => $nom) @if ($n > 0)<option value="{{ $n }}">{{ $nom }}</option>@endif @endforeach
+                                        </select>
+                                        <select wire:model="ajustAnneeDebut" class="w-20 px-2 py-1.5 text-xs border border-gray-300 rounded-lg bg-white">
+                                            @for ($y = date('Y') - 1; $y <= date('Y') + 1; $y++)<option value="{{ $y }}">{{ $y }}</option>@endfor
+                                        </select>
+                                    </div>
+                                </div>
+                                <div>
+                                    <label class="block text-[10px] font-bold text-gray-400 uppercase mb-1">Au</label>
+                                    <div class="flex gap-2">
+                                        <select wire:model="ajustMoisFin" class="flex-1 px-2 py-1.5 text-xs border border-gray-300 rounded-lg bg-white">
+                                            @foreach ($moisListe as $n => $nom) @if ($n > 0)<option value="{{ $n }}">{{ $nom }}</option>@endif @endforeach
+                                        </select>
+                                        <select wire:model="ajustAnneeFin" class="w-20 px-2 py-1.5 text-xs border border-gray-300 rounded-lg bg-white">
+                                            @for ($y = date('Y') - 1; $y <= date('Y') + 1; $y++)<option value="{{ $y }}">{{ $y }}</option>@endfor
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <p class="text-[11px] text-gray-400 mt-1.5">Le même {{ $ajustType === 'bonus' ? 'bonus' : 'retenue' }} sera créé pour chaque mois de la plage (bulletins non payés recalculés).</p>
+                        @endif
+                    </div>
+
+                    <button wire:click="ajouterAjustement"
+                        class="mt-4 w-full py-2.5 rounded-lg text-white text-sm font-semibold" style="background:#7c3aed;">
+                        Appliquer l'ajustement
+                    </button>
+
+                    {{-- Liste des ajustements du mois --}}
+                    <div class="mt-6">
+                        <p class="text-xs font-semibold text-gray-400 uppercase tracking-wide mb-2">Ajustements du mois</p>
+                        @forelse ($this->ajustements as $aj)
+                            <div class="flex items-center justify-between py-2 border-b border-gray-100">
+                                <div>
+                                    <span class="text-sm font-medium text-gray-800">{{ $aj->libelle }}</span>
+                                    @if ($aj->motif)<span class="text-xs text-gray-400"> — {{ $aj->motif }}</span>@endif
+                                </div>
+                                <div class="flex items-center gap-3">
+                                    <span class="text-sm font-bold {{ $aj->type === 'bonus' ? 'text-emerald-600' : 'text-red-500' }}">
+                                        {{ $aj->type === 'bonus' ? '+' : '−' }}{{ $aj->mode === 'pourcentage' ? $aj->montant.' % base' : number_format($aj->montant, 0, ',', ' ').' FCFA' }}
+                                    </span>
+                                    <button wire:click="supprimerAjustement({{ $aj->id }})" class="text-gray-400 hover:text-red-500" title="Supprimer">
+                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+                                    </button>
+                                </div>
+                            </div>
+                        @empty
+                            <p class="text-sm text-gray-400 text-center py-4">Aucun ajustement ce mois.</p>
+                        @endforelse
+                    </div>
+                </div>
+
+                <div class="px-6 py-4 border-t border-gray-100 bg-gray-50 rounded-b-2xl flex justify-end">
+                    <button wire:click="$set('showAjustModal', false)" class="px-5 py-2.5 text-sm font-semibold text-gray-700 bg-white border border-gray-300 rounded-xl hover:bg-gray-50">Fermer</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
     {{-- Toast --}}
     @if ($showNotification)
